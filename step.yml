@@ -1,0 +1,126 @@
+title: AppCenter Android Deploy
+summary: Deploy your awesome Android app to AppCenter.
+description: |-
+  Deploy an Android application to [AppCenter](https://appcenter.ms).
+
+  If an `app_id` is provided, the APK file will be uploaded to the specified app on HockeyApp. 
+  Otherwise HockeyApp will decide whether it's a new app or an update to an existing app based on the package ID.
+website: https://github.com/bitrise-steplib/steps-appcenter-android
+source_code_url: https://github.com/bitrise-steplib/steps-appcenter-android
+support_url: https://github.com/bitrise-steplib/steps-appcenter-android/issues
+
+project_type_tags:
+  - android
+  - xamarin
+  - cordova
+  - ionic
+  - react-native
+type_tags:
+  - deploy
+
+is_requires_admin_user: false
+is_always_run: false
+is_skippable: false
+
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/steps-hockeyapp-android-deploy
+
+inputs:
+  - apk_path: "$BITRISE_APK_PATH"
+    opts:
+      title: "APK path"
+      summary: ""
+      description:
+      is_required: true
+  - mapping_path:
+    opts:
+      title: "mapping.txt file path"
+      summary: ""
+      description: ""
+  - api_token: ""
+    opts:
+      title: "API Token"
+      summary: ""
+      description:
+      is_required: true
+      is_sensitive: true
+  - owner_name: ""
+    opts:
+      title: "Owner name"
+      summary: ""
+      description: ""
+      is_required: true
+  - app_name: ""
+    opts:
+      title: "App name"
+      summary: ""
+      description: ""
+      is_required: true
+  - distribution_group: ""
+    opts:
+      title: "Distr. group one per line"
+      summary: ""
+      description: ""
+  - distribution_store: ""
+    opts:
+      title: "Distr. store one per line"
+      summary: ""
+      description: ""
+  - distribution_tester: ""
+    opts:
+      title: "Distr. tester one per line"
+      summary: ""
+      description: ""
+  - release_notes: "Release notes"
+    opts:
+      title: "Notes attached to the deploy"
+      summary: ""
+      description: |-
+        Additional notes to the deploy.
+  - notify_testers: "yes"
+    opts:
+      title: "Notify Testers"
+      summary: ""
+      description: |-
+        
+      value_options: ["yes", "no"]
+      is_required: true
+  - mandatory: "no"
+    opts:
+      title: "Mandatory?"
+      summary: ""
+      description: |
+        Set if version is mandatory to install.
+      value_options: ["no", "yes"]
+      is_required: true
+  - debug: "no"
+    opts:
+      title: "Mandatory?"
+      summary: ""
+      description: |
+        Set if version is mandatory to install.
+      value_options: ["no", "yes"]
+      is_required: true
+
+outputs:
+  - APPCENTER_DEPLOY_STATUS: ""
+    opts:
+      title: "Deployment result: 'success' or 'failed'"
+      summary: ""
+      description: ""
+  - APPCENTER_DEPLOY_INSTALL_URL: ""
+    opts:
+      title: "Install URL of the newly deployed version"
+      summary: ""
+      description: ""
+  - APPCENTER_DEPLOY_DOOWNLOAD_URL: ""
+    opts:
+      title: "Download URL of the newly deployed version"
+      summary: ""
+      description: ""
+  - APPCENTER_PUBLIC_INSTALL_PAGE_URL: ""
+    opts:
+      title: "Public install page URL of the latest version"
+      summary: ""
+      description: ""

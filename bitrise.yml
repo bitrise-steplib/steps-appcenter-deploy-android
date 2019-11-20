@@ -1,0 +1,15 @@
+format_version: "8"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+workflows:
+  test:
+    steps:
+    - path::./:
+        inputs:
+          - apk_path: "/Users/tamaspapik/Downloads/app-debug.apk"
+          - api_token: $TOKEN
+          - owner_name: $OWNER
+          - app_name: $APPNAME
+          - debug: "yes"
+          - distribution_group: "publictest\nCollaborators"
+          - mapping_path: "/tmp/mapping.txt"
