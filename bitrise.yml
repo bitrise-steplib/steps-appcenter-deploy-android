@@ -8,6 +8,8 @@ workflows:
     - APK_PATH: app-debug.apk
     - MAPPING_DOWNLOAD_URL: https://raw.githubusercontent.com/bitrise-io/sample-artifacts/master/mappings/app-armeabi-v7a-release.txt
     - MAPPING_PATH: mapping.txt
+    - APPCENTER_APP_NAME: steps-appcenter-deploy-android
+    - APPCENTER_APP_OWNER: app-center-bot
     steps:
     steps:
     - go-list:
@@ -35,8 +37,8 @@ workflows:
         inputs:
           - apk_path: $APK_PATH
           - api_token: $API_TOKEN
-          - owner_name: app-center-bot
-          - app_name: steps-appcenter-deploy-android
-          - distribution_group: "Collaborators"
+          - owner_name: $APPCENTER_APP_OWNER
+          - app_name: $APPCENTER_APP_NAME
+          - distribution_group: Collaborators
           - mapping_path: $MAPPING_PATH
-          - release_notes: steps-appcenter-deploy-android test
+          - release_notes: Bitrise step test
