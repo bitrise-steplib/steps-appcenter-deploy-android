@@ -1,4 +1,4 @@
-format_version: "8"
+format_version: "9"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 
 workflows:
@@ -10,7 +10,6 @@ workflows:
     - MAPPING_PATH: mapping.txt
     - APPCENTER_APP_NAME: steps-appcenter-deploy-android
     - APPCENTER_APP_OWNER: app-center-bot
-    steps:
     steps:
     - go-list:
     - golint:

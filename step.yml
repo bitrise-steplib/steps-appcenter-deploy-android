@@ -49,24 +49,37 @@ inputs:
     opts:
       title: Owner name
       summary: Owner of the App Center app
-      description: Owner of the App Center app
+      description: |-
+        Owner of the App Center app.
+
+        For an app owned by a user, the URL in App Center might look like https://appcenter.ms/users/JoshuaWeber/apps/APIExample.
+        
+        Here, the {owner_name} is JoshuaWeber. For an app owned by an org, the URL might be
+        https://appcenter.ms/orgs/Microsoft/apps/APIExample and the {owner_name} would be Microsoft
+
       is_required: true
   - app_name:
     opts:
       title: App name
       summary: The name of the App Center app
-      description: The name of the App Center app
+      description: |-
+        The name of the App Center app.
+
+        For an app owned by a user, the URL in App Center might look like https://appcenter.ms/users/JoshuaWeber/apps/APIExample.
+        
+        Here, the {app_name} is ApiExample.
+
       is_required: true
   - distribution_group:
     opts:
       title: Distribution groups
-      summary: User groups you wish to distribute the app. One name per line.
-      description: User groups you wish to distribute the app. One name per line.
+      summary: User groups you wish to distribute the app. One group name per line.
+      description: User groups you wish to distribute the app. One group name per line.
   - distribution_store:
     opts:
       title: Distribution stores
-      summary: Distribution stores you wish to distribute the app. One name per line.
-      description: Distribution stores you wish to distribute the app. One name per line.
+      summary: Distribution stores you wish to distribute the app. One store name per line.
+      description: Distribution stores you wish to distribute the app. One store name per line.
   - distribution_tester:
     opts:
       title: Testers
@@ -77,7 +90,7 @@ inputs:
       title: Release notes text
       summary: Release notes text
       description: |-
-        Additional notes to the deploy.
+        Additional notes for the deploye artifact.
   - notify_testers: "yes"
     opts:
       title: Notify Testers
@@ -103,21 +116,30 @@ inputs:
 outputs:
   - APPCENTER_DEPLOY_STATUS:
     opts:
-      title: "Deployment status"
+      title: Deployment status
       summary: "Deployment status: 'success' or 'failed'"
       description: "Deployment status: 'success' or 'failed'"
   - APPCENTER_DEPLOY_INSTALL_URL:
     opts:
-      title: Install URL of the newly deployed version
-      summary: ""
-      description: ""
+      title: Install page URL
+      summary: Install page URL of the newly deployed version
+      description: |-
+        Install page URL of the newly deployed version.
+
+        App Center sign in is required.
   - APPCENTER_DEPLOY_DOOWNLOAD_URL:
     opts:
-      title: Download URL of the newly deployed version
+      title: Download URL
       summary: Download URL of the newly deployed version
-      description: Download URL of the newly deployed version
+      description: |-
+        Download URL of the newly deployed version.
+        
+        App Center sign in is required.
   - APPCENTER_PUBLIC_INSTALL_PAGE_URL:
     opts:
-      title: Public install page
+      title: Public install page URL
       summary: Public install page URL of the latest version
-      description: Public install page URL of the latest version
+      description: |-
+        Public install page URL of the latest version.
+
+        Only populated for the last public distribution group provided.
