@@ -37,7 +37,6 @@ workflows:
           - api_token: $API_TOKEN
           - owner_name: app-center-bot
           - app_name: steps-appcenter-deploy-android
-          - debug: "yes"
           - distribution_group: "Collaborators"
           - mapping_path: $MAPPING_PATH
           - release_notes: steps-appcenter-deploy-android test
