@@ -124,7 +124,7 @@ outputs:
       title: Install page URL
       summary: Install page URL of the newly deployed version
       description: Install page URL of the newly deployed version.
-  - APPCENTER_DEPLOY_DOOWNLOAD_URL:
+  - APPCENTER_DEPLOY_DOWNLOAD_URL:
     opts:
       title: Download URL
       summary: Download URL of the newly deployed version
