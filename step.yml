@@ -90,7 +90,7 @@ inputs:
       title: Release notes text
       summary: Release notes text
       description: |-
-        Additional notes for the deploye artifact.
+        Additional notes for the deployed artifact.
   - notify_testers: "yes"
     opts:
       title: Notify Testers
@@ -123,23 +123,14 @@ outputs:
     opts:
       title: Install page URL
       summary: Install page URL of the newly deployed version
-      description: |-
-        Install page URL of the newly deployed version.
-
-        App Center sign in is required.
+      description: Install page URL of the newly deployed version.
   - APPCENTER_DEPLOY_DOOWNLOAD_URL:
     opts:
       title: Download URL
       summary: Download URL of the newly deployed version
-      description: |-
-        Download URL of the newly deployed version.
-        
-        App Center sign in is required.
+      description: Download URL of the newly deployed version.
   - APPCENTER_PUBLIC_INSTALL_PAGE_URL:
     opts:
       title: Public install page URL
       summary: Public install page URL of the latest version
-      description: |-
-        Public install page URL of the latest version.
-
-        Only populated for the last public distribution group provided.
+      description: Public install page URL of the latest version.

@@ -38,6 +38,8 @@ workflows:
           - api_token: $API_TOKEN
           - owner_name: $APPCENTER_APP_OWNER
           - app_name: $APPCENTER_APP_NAME
-          - distribution_group: Collaborators
+          - distribution_group: |-
+              Collaborators
+              Public
           - mapping_path: $MAPPING_PATH
           - release_notes: Bitrise step test
