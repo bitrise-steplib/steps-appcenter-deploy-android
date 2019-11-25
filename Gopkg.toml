@@ -1,5 +1,5 @@
 [[constraint]]
-  branch = "dev"
+  branch = "master"
   name = "github.com/bitrise-io/appcenter"
 
 [[constraint]]

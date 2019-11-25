@@ -2,29 +2,35 @@
 
 
 [[projects]]
-  branch = "dev"
-  digest = "1:d53ef86754c0fac83cc83124bf80d7faf0d151809d05ac15b8da88bdf5403f3b"
+  branch = "master"
+  digest = "1:85e83be71e9404f2eedf29bc71775f7bd6da8ffcae26267f99a2d59ea55cca58"
   name = "github.com/bitrise-io/appcenter"
   packages = ["."]
   pruneopts = "UT"
-  revision = "18e09ac3a1d41011bbea4fc0f7e1fd7f2b3ac936"
+  revision = "c03f9557ac55d13f416a411334fd9ca7b196234f"
 
 [[projects]]
   branch = "master"
-  digest = "1:65497df2301289c26765c4cf8fcd4709de190dd620ea822ae2dc67edfc598307"
+  digest = "1:89562e1ecde606efbc12f60b41582279cccea8f4d39b31290e2d64bd1f08ee29"
   name = "github.com/bitrise-io/go-steputils"
-  packages = ["stepconf"]
+  packages = [
+    "stepconf",
+    "tools",
+  ]
   pruneopts = "UT"
   revision = "3c98d95a94d51624a26e99419d0fc03d2aab0055"
 
 [[projects]]
   branch = "master"
-  digest = "1:cc12e8d1756854b6bd1a806e0e62f2e2ce1e275be1f1d67b5e80dc5321db5fba"
+  digest = "1:0c8282cb84562f0119ecabf1841a5a63c4ee815178bc2f1ae678e49b27551a25"
   name = "github.com/bitrise-io/go-utils"
   packages = [
     "colorstring",
+    "command",
+    "errorutil",
     "log",
     "parseutil",
+    "pathutil",
     "pointers",
   ]
   pruneopts = "UT"
@@ -36,6 +42,7 @@
   input-imports = [
     "github.com/bitrise-io/appcenter",
     "github.com/bitrise-io/go-steputils/stepconf",
+    "github.com/bitrise-io/go-steputils/tools",
     "github.com/bitrise-io/go-utils/log",
   ]
   solver-name = "gps-cdcl"

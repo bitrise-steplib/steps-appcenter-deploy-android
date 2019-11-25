@@ -18,4 +18,5 @@ type Store struct {
 	} `json:"intune_details"`
 	ServiceConnectionID string `json:"service_connection_id"`
 	CreatedBy           string `json:"created_by"`
+	Error               Error  `json:"error"`
 }

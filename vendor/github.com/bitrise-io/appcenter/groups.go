@@ -7,4 +7,5 @@ type Group struct {
 	DisplayName string `json:"display_name"`
 	Origin      string `json:"origin"`
 	IsPublic    bool   `json:"is_public"`
+	Error       Error  `json:"error"`
 }

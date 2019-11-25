@@ -70,6 +70,7 @@ type Release struct {
 	Enabled         bool   `json:"enabled"`
 	Status          string `json:"status"`
 	IsExternalBuild bool   `json:"is_external_build"`
+	Error           Error  `json:"error"`
 }
 
 // AddGroup ...
