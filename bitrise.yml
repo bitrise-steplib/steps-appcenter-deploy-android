@@ -43,3 +43,33 @@ workflows:
               Public
           - mapping_path: $MAPPING_PATH
           - release_notes: Bitrise step test
+    - script:
+        title: Check output envs
+        inputs:
+          - content: |-
+              #!/bin/bash
+              set -ex
+
+              if [ -z $APPCENTER_DEPLOY_INSTALL_URL ]
+              then
+                echo "ERROR: APPCENTER_DEPLOY_INSTALL_URL variable empty"
+                exit 1
+              fi
+
+              if [ -z $APPCENTER_DEPLOY_DOWNLOAD_URL ];
+              then
+                echo "ERROR: APPCENTER_DEPLOY_DOWNLOAD_URL variable empty"
+                exit 1
+              fi
+
+              if [ -z $APPCENTER_PUBLIC_INSTALL_PAGE_URL ]
+              then
+                echo "ERROR: APPCENTER_PUBLIC_INSTALL_PAGE_URL variable empty"
+                exit 1
+              fi
+
+              if [ "$APPCENTER_DEPLOY_STATUS" != "success" ]
+              then
+                echo "ERROR: APPCENTER_DEPLOY_STATUS variable is $APPCENTER_DEPLOY_STATUS"
+                exit 1
+              fi
