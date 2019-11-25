@@ -29,98 +29,95 @@ toolkit:
 inputs:
   - apk_path: "$BITRISE_APK_PATH"
     opts:
-      title: "APK path"
-      summary: ""
-      description:
+      title: APK path
+      summary: Path to binary file
+      description: Path to binary file
       is_required: true
   - mapping_path:
     opts:
-      title: "mapping.txt file path"
-      summary: ""
-      description: ""
-  - api_token: ""
+      title: mapping.txt file path
+      summary: Path to an Android mapping.txt file.
+      description: Path to an Android mapping.txt file.
+  - api_token:
     opts:
-      title: "API Token"
-      summary: ""
-      description:
+      title: API Token
+      summary: App Center API token
+      description: App Center API token
       is_required: true
       is_sensitive: true
-  - owner_name: ""
+  - owner_name:
     opts:
-      title: "Owner name"
-      summary: ""
-      description: ""
+      title: Owner name
+      summary: Owner of the App Center app
+      description: Owner of the App Center app
       is_required: true
-  - app_name: ""
+  - app_name:
     opts:
-      title: "App name"
-      summary: ""
-      description: ""
+      title: App name
+      summary: The name of the App Center app
+      description: The name of the App Center app
       is_required: true
-  - distribution_group: ""
+  - distribution_group:
     opts:
-      title: "Distr. group one per line"
-      summary: ""
-      description: ""
-  - distribution_store: ""
+      title: Distribution groups
+      summary: User groups you wish to distribute the app. One name per line.
+      description: User groups you wish to distribute the app. One name per line.
+  - distribution_store:
     opts:
-      title: "Distr. store one per line"
-      summary: ""
-      description: ""
-  - distribution_tester: ""
+      title: Distribution stores
+      summary: Distribution stores you wish to distribute the app. One name per line.
+      description: Distribution stores you wish to distribute the app. One name per line.
+  - distribution_tester:
     opts:
-      title: "Distr. tester one per line"
-      summary: ""
-      description: ""
+      title: Testers
+      summary: List of individual testers. One email per line.
+      description: List of individual testers. One email per line.
   - release_notes: "Release notes"
     opts:
-      title: "Notes attached to the deploy"
-      summary: ""
+      title: Release notes text
+      summary: Release notes text
       description: |-
         Additional notes to the deploy.
   - notify_testers: "yes"
     opts:
-      title: "Notify Testers"
-      summary: ""
-      description: |-
-        
+      title: Notify Testers
+      summary: Send notification email to testers and distribution groups.
+      description: Send notification email to testers and distribution groups.
       value_options: ["yes", "no"]
       is_required: true
   - mandatory: "no"
     opts:
-      title: "Mandatory?"
-      summary: ""
-      description: |
-        Set if version is mandatory to install.
+      title: Mandatory
+      summary: Enforce installation of distribution version. Requires SDK integration.
+      description: Enforce installation of distribution version. Requires SDK integration.
       value_options: ["no", "yes"]
       is_required: true
   - debug: "no"
     opts:
-      title: "Mandatory?"
-      summary: ""
-      description: |
-        Set if version is mandatory to install.
+      title: Debug
+      summary: Enable verbose logs
+      description: Enable verbose logs
       value_options: ["no", "yes"]
       is_required: true
 
 outputs:
-  - APPCENTER_DEPLOY_STATUS: ""
+  - APPCENTER_DEPLOY_STATUS:
     opts:
-      title: "Deployment result: 'success' or 'failed'"
+      title: "Deployment status"
+      summary: "Deployment status: 'success' or 'failed'"
+      description: "Deployment status: 'success' or 'failed'"
+  - APPCENTER_DEPLOY_INSTALL_URL:
+    opts:
+      title: Install URL of the newly deployed version
       summary: ""
       description: ""
-  - APPCENTER_DEPLOY_INSTALL_URL: ""
+  - APPCENTER_DEPLOY_DOOWNLOAD_URL:
     opts:
-      title: "Install URL of the newly deployed version"
-      summary: ""
-      description: ""
-  - APPCENTER_DEPLOY_DOOWNLOAD_URL: ""
+      title: Download URL of the newly deployed version
+      summary: Download URL of the newly deployed version
+      description: Download URL of the newly deployed version
+  - APPCENTER_PUBLIC_INSTALL_PAGE_URL:
     opts:
-      title: "Download URL of the newly deployed version"
-      summary: ""
-      description: ""
-  - APPCENTER_PUBLIC_INSTALL_PAGE_URL: ""
-    opts:
-      title: "Public install page URL of the latest version"
-      summary: ""
-      description: ""
+      title: Public install page
+      summary: Public install page URL of the latest version
+      description: Public install page URL of the latest version
