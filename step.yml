@@ -29,7 +29,7 @@ toolkit:
 inputs:
   - app_path: "$BITRISE_APP_PATH"
     opts:
-      title: APK path
+      title: APP path
       summary: Path to binary file
       description: Path to binary file
       is_required: true
