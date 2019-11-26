@@ -30,6 +30,11 @@ type config struct {
 
 func failf(f string, args ...interface{}) {
 	log.Errorf(f, args...)
+
+	if err := tools.ExportEnvironmentWithEnvman(statusEnvKey, "failed"); err != nil {
+		log.Errorf("Failed to export environment variable: %s with value: %s. Error: %s", statusEnvKey, "failed", err)
+	}
+
 	os.Exit(1)
 }
 
