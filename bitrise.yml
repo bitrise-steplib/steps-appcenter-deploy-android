@@ -46,6 +46,7 @@ workflows:
               Collaborators
               Public
           - mapping_path: $MAPPING_PATH
+          - distribution_tester: tooling.bot@bitrise.io
           - release_notes: Bitrise step test
     - script:
         title: Check output envs
