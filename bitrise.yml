@@ -32,9 +32,9 @@ workflows:
           - content: |-
               #!/bin/bash
               set -ex
-              curl $APK_DOWNLOAD_URL > $APK_PATH
-              curl $MAPPING_DOWNLOAD_URL > $MAPPING_PATH
-              curl $AAB_DOWNLOAD_URL > $AAB_PATH
+              curl -f $APK_DOWNLOAD_URL > $APK_PATH
+              curl -f $MAPPING_DOWNLOAD_URL > $MAPPING_PATH
+              curl -f $AAB_DOWNLOAD_URL > $AAB_PATH
     - path::./:
         inputs:
           - app_path: $APK_PATH
