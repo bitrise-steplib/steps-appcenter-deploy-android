@@ -2,12 +2,9 @@ title: AppCenter Android Deploy
 summary: Deploy your awesome Android app to AppCenter.
 description: |-
   Deploy an Android application to [AppCenter](https://appcenter.ms).
-
-  If an `app_id` is provided, the APK file will be uploaded to the specified app on HockeyApp. 
-  Otherwise HockeyApp will decide whether it's a new app or an update to an existing app based on the package ID.
-website: https://github.com/bitrise-steplib/steps-appcenter-android
-source_code_url: https://github.com/bitrise-steplib/steps-appcenter-android
-support_url: https://github.com/bitrise-steplib/steps-appcenter-android/issues
+website: https://github.com/bitrise-steplib/steps-appcenter-deploy-android
+source_code_url: https://github.com/bitrise-steplib/steps-appcenter-deploy-android
+support_url: https://github.com/bitrise-steplib/steps-appcenter-deploy-android/issues
 
 project_type_tags:
   - android
@@ -24,14 +21,18 @@ is_skippable: false
 
 toolkit:
   go:
-    package_name: github.com/bitrise-steplib/steps-hockeyapp-android-deploy
+    package_name: github.com/bitrise-steplib/steps-appcenter-deploy-android
 
 inputs:
   - app_path: "$BITRISE_APP_PATH"
     opts:
       title: APP path
       summary: Path to binary file
-      description: Path to binary file
+      description: |-
+        Path to binary file
+        
+        For APKs, only single or universal APKs are supported: https://docs.microsoft.com/en-us/appcenter/build/react-native/android/#63-building-multiple-apks
+
       is_required: true
   - mapping_path:
     opts:
@@ -74,17 +75,26 @@ inputs:
     opts:
       title: Distribution groups
       summary: User groups you wish to distribute the app. One group name per line.
-      description: User groups you wish to distribute the app. One group name per line.
+      description: |-
+        User groups you wish to distribute the app. One group name per line.
+
+        Distribution of AAB is supported only for Google Play store deployment: https://docs.microsoft.com/en-us/appcenter/distribution/uploading#android
   - distribution_store:
     opts:
       title: Distribution stores
       summary: Distribution stores you wish to distribute the app. One store name per line.
-      description: Distribution stores you wish to distribute the app. One store name per line.
+      description: |-
+        Distribution stores you wish to distribute the app. One store name per line.
+
+        Distribution of AAB is supported only for Google Play store deployment: https://docs.microsoft.com/en-us/appcenter/distribution/uploading#android
   - distribution_tester:
     opts:
       title: Testers
       summary: List of individual testers. One email per line.
-      description: List of individual testers. One email per line.
+      description: |-
+        List of individual testers. One email per line.
+
+        Distribution of AAB is supported only for Google Play store deployment: https://docs.microsoft.com/en-us/appcenter/distribution/uploading#android
   - release_notes: "Release notes"
     opts:
       title: Release notes text
