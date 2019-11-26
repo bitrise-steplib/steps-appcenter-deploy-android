@@ -6,6 +6,8 @@ workflows:
     envs:
     - APK_DOWNLOAD_URL: https://raw.githubusercontent.com/bitrise-io/sample-artifacts/master/apks/app-armeabi-v7a-release.apk
     - APK_PATH: app-debug.apk
+    - AAB_DOWNLOAD_URL: https://raw.githubusercontent.com/bitrise-io/sample-artifacts/master/app-bitrise-signed.aab
+    - AAB_PATH: app-bitrise-signed.aab
     - MAPPING_DOWNLOAD_URL: https://raw.githubusercontent.com/bitrise-io/sample-artifacts/master/mappings/app-armeabi-v7a-release.txt
     - MAPPING_PATH: mapping.txt
     - APPCENTER_APP_NAME: steps-appcenter-deploy-android
@@ -32,12 +34,14 @@ workflows:
               set -ex
               curl $APK_DOWNLOAD_URL > $APK_PATH
               curl $MAPPING_DOWNLOAD_URL > $MAPPING_PATH
+              curl $AAB_DOWNLOAD_URL > $AAB_PATH
     - path::./:
         inputs:
-          - apk_path: $APK_PATH
+          - app_path: $APK_PATH
           - api_token: $API_TOKEN
           - owner_name: $APPCENTER_APP_OWNER
           - app_name: $APPCENTER_APP_NAME
+          - debug: "yes"
           - distribution_group: |-
               Collaborators
               Public
@@ -73,3 +77,45 @@ workflows:
                 echo "ERROR: APPCENTER_DEPLOY_STATUS variable is $APPCENTER_DEPLOY_STATUS"
                 exit 1
               fi
+
+              envman add --key "APPCENTER_DEPLOY_INSTALL_URL" --value ""
+              envman add --key "APPCENTER_DEPLOY_DOWNLOAD_URL" --value ""
+              envman add --key "APPCENTER_PUBLIC_INSTALL_PAGE_URL" --value ""
+              envman add --key "APPCENTER_DEPLOY_STATUS" --value ""
+
+    - path::./:
+        inputs:
+          - app_path: $AAB_PATH
+          - api_token: $API_TOKEN
+          - owner_name: $APPCENTER_APP_OWNER
+          - app_name: $APPCENTER_APP_NAME
+          - debug: "yes"
+          - release_notes: Bitrise step test
+    - script:
+        title: Check output envs
+        inputs:
+          - content: |-
+              #!/bin/bash
+              set -ex
+
+              if [ -z $APPCENTER_DEPLOY_INSTALL_URL ]
+              then
+                echo "ERROR: APPCENTER_DEPLOY_INSTALL_URL variable empty"
+                exit 1
+              fi
+
+              if [ -z $APPCENTER_DEPLOY_DOWNLOAD_URL ];
+              then
+                echo "ERROR: APPCENTER_DEPLOY_DOWNLOAD_URL variable empty"
+                exit 1
+              fi
+
+              if [ "$APPCENTER_DEPLOY_STATUS" != "success" ]
+              then
+                echo "ERROR: APPCENTER_DEPLOY_STATUS variable is $APPCENTER_DEPLOY_STATUS"
+                exit 1
+              fi
+
+              envman add --key "APPCENTER_DEPLOY_INSTALL_URL" --value ""
+              envman add --key "APPCENTER_DEPLOY_DOWNLOAD_URL" --value ""
+              envman add --key "APPCENTER_DEPLOY_STATUS" --value ""

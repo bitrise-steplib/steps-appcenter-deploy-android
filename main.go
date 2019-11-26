@@ -15,7 +15,7 @@ const statusEnvKey = "APPCENTER_DEPLOY_STATUS"
 
 type config struct {
 	Debug              bool            `env:"debug,required"`
-	ApkPath            string          `env:"apk_path,file"`
+	AppPath            string          `env:"app_path,file"`
 	AppName            string          `env:"app_name,required"`
 	APIToken           stepconf.Secret `env:"api_token,required"`
 	OwnerName          string          `env:"owner_name,required"`
@@ -45,7 +45,7 @@ func main() {
 
 	log.Infof("Uploading binary")
 
-	release, err := app.NewRelease(cfg.ApkPath)
+	release, err := app.NewRelease(cfg.AppPath)
 	if err != nil {
 		failf("Failed to create new release, error: %s", err)
 	}
