@@ -190,8 +190,8 @@ func (r Release) UploadSymbol(filePath string) error {
 			Version    string     `json:"version,omitempty"`
 		}{
 			FileName:   filepath.Base(filePath),
-			Build:      r.ShortVersion,
-			Version:    r.Version,
+			Build:      r.Version,
+			Version:    r.ShortVersion,
 			SymbolType: symbolType,
 		}
 		postResponse struct {
