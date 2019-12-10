@@ -88,7 +88,10 @@ func (c Client) jsonRequest(method, url string, body interface{}, response inter
 		fmt.Println(string(b))
 	}
 
-	defer func() { _ = resp.Body.Close() }()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+		}
+	}()
 
 	if response != nil {
 		rb, err := ioutil.ReadAll(resp.Body)
@@ -146,7 +149,10 @@ func (c Client) uploadForm(url string, files map[string]string) (int, error) {
 		return -1, err
 	}
 
-	defer func() { _ = resp.Body.Close() }()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+		}
+	}()
 
 	return resp.StatusCode, nil
 }
@@ -170,7 +176,10 @@ func (c Client) uploadFile(url string, filePath string) (int, error) {
 		return -1, err
 	}
 
-	defer func() { _ = resp.Body.Close() }()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+		}
+	}()
 
 	return resp.StatusCode, nil
 }

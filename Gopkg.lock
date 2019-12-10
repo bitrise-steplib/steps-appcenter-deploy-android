@@ -3,11 +3,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:85e83be71e9404f2eedf29bc71775f7bd6da8ffcae26267f99a2d59ea55cca58"
+  digest = "1:80a6a3c53c3f95b473e9bc7e400a1760e8e2c2320f939bd05717b513c87f851d"
   name = "github.com/bitrise-io/appcenter"
   packages = ["."]
   pruneopts = "UT"
-  revision = "c03f9557ac55d13f416a411334fd9ca7b196234f"
+  revision = "76bacf2fef28c04bf42e31a8c0f953f6d6282445"
 
 [[projects]]
   branch = "master"
