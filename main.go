@@ -155,11 +155,11 @@ func main() {
 		statusEnvKey:                    "success",
 		"APPCENTER_DEPLOY_INSTALL_URL":  release.InstallURL,
 		"APPCENTER_DEPLOY_DOWNLOAD_URL": release.DownloadURL,
-		"APPCENTER_RELEASE_PAGE_URL": fmt.Sprintf("https://appcenter.ms/orgs/%s/apps/%s/distribute/%s", cfg.OwnerName, cfg.AppName, release.ID),
+		"APPCENTER_RELEASE_PAGE_URL": fmt.Sprintf("https://appcenter.ms/orgs/%s/apps/%s/distribute/%d", cfg.OwnerName, cfg.AppName, release.ID),
 	}
 
 	if len(publicGroup) > 0 {
-		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URL"] = fmt.Sprintf("https://install.appcenter.ms/users/%s/apps/%s/distribution_groups/%d", cfg.OwnerName, cfg.AppName, publicGroup)
+		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URL"] = fmt.Sprintf("https://install.appcenter.ms/users/%s/apps/%s/distribution_groups/%s", cfg.OwnerName, cfg.AppName, publicGroup)
 	}
 
 	for key, value := range outputs {
