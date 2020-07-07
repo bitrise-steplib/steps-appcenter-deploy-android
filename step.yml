@@ -144,3 +144,8 @@ outputs:
       title: Public install page URL
       summary: Public install page URL of the latest version
       description: Public install page URL of the latest version.
+  - APPCENTER_RELEASE_PAGE_URL:
+    opts:
+      title: Release Page URL
+      summary: URL to the release page containing release notes.
+      description: URL to the release page containing release notes, easily share with business partners and QA for testing.
