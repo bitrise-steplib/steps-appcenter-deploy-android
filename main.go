@@ -159,7 +159,7 @@ func main() {
 	}
 
 	if len(publicGroup) > 0 {
-		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URL"] = fmt.Sprintf("https://install.appcenter.ms/users/%s/apps/%s/distribution_groups/%s", cfg.OwnerName, cfg.AppName, publicGroup)
+		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URL"] = fmt.Sprintf("https://install.appcenter.ms/users/%s/apps/%s/distribution_groups/%d", cfg.OwnerName, cfg.AppName, publicGroup)
 	}
 
 	for key, value := range outputs {
