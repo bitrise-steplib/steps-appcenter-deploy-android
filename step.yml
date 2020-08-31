@@ -139,6 +139,11 @@ outputs:
       title: Download URL
       summary: Download URL of the newly deployed version
       description: Download URL of the newly deployed version.
+  - APPCENTER_DEPLOY_RELEASE_ID:
+    opts:
+      title: Release ID
+      summary: ID of the new release for later retrieval via App Center APIs.
+      description: ID of the new release for later retrieval via App Center APIs.
   - APPCENTER_PUBLIC_INSTALL_PAGE_URL:
     opts:
       title: Public install page URL

@@ -118,6 +118,12 @@ workflows:
                 exit 1
               fi
 
+              if [ -z $APPCENTER_DEPLOY_RELEASE_ID ];
+              then
+                echo "ERROR: APPCENTER_DEPLOY_RELEASE_ID variable empty"
+                exit 1
+              fi
+
               if [ "$APPCENTER_DEPLOY_STATUS" != "success" ]
               then
                 echo "ERROR: APPCENTER_DEPLOY_STATUS variable is $APPCENTER_DEPLOY_STATUS"
@@ -126,4 +132,5 @@ workflows:
 
               envman add --key "APPCENTER_DEPLOY_INSTALL_URL" --value ""
               envman add --key "APPCENTER_DEPLOY_DOWNLOAD_URL" --value ""
+              envman add --key "APPCENTER_DEPLOY_RELEASE_ID" --value ""
               envman add --key "APPCENTER_DEPLOY_STATUS" --value ""
