@@ -79,10 +79,17 @@ workflows:
                 exit 1
               fi
 
+              if [ -z $APPCENTER_RELEASE_PAGE_URL ]
+              then
+                echo "ERROR: APPCENTER_RELEASE_PAGE_URL variable empty"
+                exit 1
+              fi
+
               envman add --key "APPCENTER_DEPLOY_INSTALL_URL" --value ""
               envman add --key "APPCENTER_DEPLOY_DOWNLOAD_URL" --value ""
               envman add --key "APPCENTER_PUBLIC_INSTALL_PAGE_URL" --value ""
               envman add --key "APPCENTER_DEPLOY_STATUS" --value ""
+              envman add --key "APPCENTER_RELEASE_PAGE_URL" --value ""
 
     - path::./:
         inputs:
