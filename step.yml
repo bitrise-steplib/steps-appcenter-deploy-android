@@ -79,6 +79,7 @@ inputs:
         User groups you wish to distribute the app. One group name per line.
 
         Distribution of AAB is supported only for Google Play store deployment: https://docs.microsoft.com/en-us/appcenter/distribution/uploading#android
+      is_required: true
   - distribution_store:
     opts:
       title: Distribution stores

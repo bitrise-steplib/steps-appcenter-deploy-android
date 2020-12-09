@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 
 	"github.com/bitrise-io/appcenter"
 	"github.com/bitrise-io/go-steputils/stepconf"
@@ -51,7 +51,12 @@ func main() {
 
 	log.Infof("Uploading binary")
 
-	release, err := app.NewRelease(cfg.AppPath)
+	releaseOptions := appcenter.ReleaseOptions{
+		GroupNames:    strings.Split(cfg.DistributionGroup, "\n"),
+		Mandatory:     cfg.Mandatory,
+		NotifyTesters: cfg.NotifyTesters,
+	}
+	release, err := app.NewRelease(cfg.AppPath, releaseOptions)
 	if err != nil {
 		failf("Failed to create new release, error: %s", err)
 	}
@@ -93,10 +98,6 @@ func main() {
 		group, err := app.Groups(groupName)
 		if err != nil {
 			failf("Failed to fetch group with name: (%s), error: %s", groupName, err)
-		}
-
-		if err := release.AddGroup(group, cfg.Mandatory, cfg.NotifyTesters); err != nil {
-			failf("Failed to add group(%s) to the release, error: %s", groupName, err)
 		}
 
 		if group.IsPublic {
@@ -156,8 +157,8 @@ func main() {
 		statusEnvKey:                    "success",
 		"APPCENTER_DEPLOY_INSTALL_URL":  release.InstallURL,
 		"APPCENTER_DEPLOY_DOWNLOAD_URL": release.DownloadURL,
-		"APPCENTER_RELEASE_PAGE_URL": fmt.Sprintf("https://appcenter.ms/orgs/%s/apps/%s/distribute/releases/%d", cfg.OwnerName, cfg.AppName, release.ID),
-		"APPCENTER_DEPLOY_RELEASE_ID": strconv.Itoa(release.ID),
+		"APPCENTER_RELEASE_PAGE_URL":    fmt.Sprintf("https://appcenter.ms/orgs/%s/apps/%s/distribute/releases/%d", cfg.OwnerName, cfg.AppName, release.ID),
+		"APPCENTER_DEPLOY_RELEASE_ID":   strconv.Itoa(release.ID),
 	}
 
 	if len(publicGroup) > 0 {
