@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	"github.com/bitrise-io/appcenter"
+	"github.com/bitrise-io/appcenter/client"
+	"github.com/bitrise-io/appcenter/model"
 	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-steputils/tools"
 	"github.com/bitrise-io/go-utils/log"
@@ -29,16 +31,6 @@ type config struct {
 	DistributionTester string          `env:"distribution_tester"`
 }
 
-func failf(f string, args ...interface{}) {
-	log.Errorf(f, args...)
-
-	if err := tools.ExportEnvironmentWithEnvman(statusEnvKey, "failed"); err != nil {
-		log.Errorf("Failed to export environment variable: %s with value: %s. Error: %s", statusEnvKey, "failed", err)
-	}
-
-	os.Exit(1)
-}
-
 func main() {
 	var cfg config
 	if err := stepconf.Parse(&cfg); err != nil {
@@ -47,16 +39,25 @@ func main() {
 	stepconf.Print(cfg)
 	fmt.Println()
 
-	app := appcenter.NewClient(string(cfg.APIToken), cfg.Debug).Apps(cfg.OwnerName, cfg.AppName)
+	app := model.App{
+		Owner:   cfg.OwnerName,
+		AppName: cfg.AppName,
+	}
 
-	log.Infof("Uploading binary")
-
-	releaseOptions := appcenter.ReleaseOptions{
+	releaseOptions := model.ReleaseOptions{
 		GroupNames:    strings.Split(cfg.DistributionGroup, "\n"),
 		Mandatory:     cfg.Mandatory,
 		NotifyTesters: cfg.NotifyTesters,
+		FilePath:      cfg.AppPath,
+		App:           app,
 	}
-	release, err := app.NewRelease(cfg.AppPath, releaseOptions)
+
+	api := client.CreateAPIWithClientParams(string(cfg.APIToken), cfg.Debug)
+	appAPI := appcenter.CreateApplicationAPI(api, releaseOptions)
+
+	log.Infof("Uploading binary")
+
+	release, err := appAPI.NewRelease()
 	if err != nil {
 		failf("Failed to create new release, error: %s", err)
 	}
@@ -64,9 +65,18 @@ func main() {
 	log.Donef("- Done")
 	fmt.Println()
 
+	releaseAPI := appcenter.CreateReleaseAPI(api, release, releaseOptions)
+
+	log.Infof("Setting distribution group(s)")
+
+	err = releaseAPI.AddGroupsToRelease(releaseOptions.GroupNames)
+	if err != nil {
+		failf("Failed to set groups on the release %s, groups: %s, error: %s", release.ID, releaseOptions.GroupNames, err)
+	}
+
 	if len(cfg.MappingPath) > 0 {
 		log.Infof("Uploading mapping file")
-		if err := release.UploadSymbol(cfg.MappingPath); err != nil {
+		if err := releaseAPI.UploadSymbol(cfg.MappingPath); err != nil {
 			failf("Failed to upload symbol file(%s), error: %s", cfg.MappingPath, err)
 		}
 		log.Donef("- Done")
@@ -75,33 +85,31 @@ func main() {
 
 	if len(cfg.ReleaseNotes) > 0 {
 		log.Infof("Setting release notes")
-		if err := release.SetReleaseNote(cfg.ReleaseNotes); err != nil {
+		if err := releaseAPI.SetReleaseNote(cfg.ReleaseNotes); err != nil {
 			failf("Failed to set release note, error: %s", err)
 		}
 		log.Donef("- Done")
 		fmt.Println()
 	}
 
-	log.Infof("Setting distribution group(s)")
+	log.Infof("Gatehering public group(s)")
 
-	var publicGroup string
-
-	for _, groupName := range strings.Split(cfg.DistributionGroup, "\n") {
+	var publicGroup []string
+	for _, groupName := range releaseOptions.GroupNames {
 		groupName = strings.TrimSpace(groupName)
-
 		if len(groupName) == 0 {
 			continue
 		}
 
 		log.Printf("- %s", groupName)
 
-		group, err := app.Groups(groupName)
+		group, err := appAPI.Groups(groupName)
 		if err != nil {
 			failf("Failed to fetch group with name: (%s), error: %s", groupName, err)
 		}
 
 		if group.IsPublic {
-			publicGroup = groupName
+			publicGroup = append(publicGroup, groupName)
 		}
 	}
 
@@ -119,12 +127,12 @@ func main() {
 
 		log.Printf("- %s", storeName)
 
-		store, err := app.Stores(storeName)
+		store, err := appAPI.Stores(storeName)
 		if err != nil {
 			failf("Failed to fetch store with name: (%s), error: %s", storeName, err)
 		}
 
-		if err := release.AddStore(store); err != nil {
+		if err := releaseAPI.AddStore(store); err != nil {
 			failf("Failed to add store(%s) to the release, error: %s", storeName, err)
 		}
 	}
@@ -143,7 +151,7 @@ func main() {
 
 		log.Printf("- %s", email)
 
-		if err := release.AddTester(email, cfg.Mandatory, cfg.NotifyTesters); err != nil {
+		if err := releaseAPI.AddTester(email); err != nil {
 			failf("Failed to add tester(%s) to the release, error: %s", email, err)
 		}
 	}
@@ -161,8 +169,17 @@ func main() {
 		"APPCENTER_DEPLOY_RELEASE_ID":   strconv.Itoa(release.ID),
 	}
 
-	if len(publicGroup) > 0 {
-		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URL"] = fmt.Sprintf("https://install.appcenter.ms/users/%s/apps/%s/distribution_groups/%s", cfg.OwnerName, cfg.AppName, publicGroup)
+	if len(publicGroup) == 1 {
+		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URL"] = fmt.Sprintf("https://install.appcenter.ms/users/%s/apps/%s/distribution_groups/%s", cfg.OwnerName, cfg.AppName, publicGroup[0])
+	}
+
+	if len(publicGroup) > 1 {
+		var groupUrls []string
+		for _, groupName := range publicGroup {
+			groupUrls = append(groupUrls, fmt.Sprintf("https://install.appcenter.ms/users/%s/apps/%s/distribution_groups/%s", cfg.OwnerName, cfg.AppName, groupName))
+		}
+
+		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URLS"] = strings.Join(groupUrls, ", ")
 	}
 
 	for key, value := range outputs {
@@ -173,4 +190,14 @@ func main() {
 	}
 
 	log.Donef("- Done")
+}
+
+func failf(f string, args ...interface{}) {
+	log.Errorf(f, args...)
+
+	if err := tools.ExportEnvironmentWithEnvman(statusEnvKey, "failed"); err != nil {
+		log.Errorf("Failed to export environment variable: %s with value: %s. Error: %s", statusEnvKey, "failed", err)
+	}
+
+	os.Exit(1)
 }
