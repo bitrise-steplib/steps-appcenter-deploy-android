@@ -53,7 +53,7 @@ workflows:
           - api_token: $API_TOKEN
           - owner_name: $APPCENTER_APP_OWNER
           - app_name: $APPCENTER_APP_NAME
-          - debug: "yes"
+          - debug: "false" # Because of the upload
           - distribution_group: |-
               Collaborators
               Public
