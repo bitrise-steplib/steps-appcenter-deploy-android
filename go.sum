@@ -24,6 +24,8 @@ github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+Ce
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bitrise-io/appcenter v0.0.0-20191210145947-76bacf2fef28 h1:s+CrasIFocHgiTEutD43pi2qYOPfAnCbGooVVcUrew8=
 github.com/bitrise-io/appcenter v0.0.0-20191210145947-76bacf2fef28/go.mod h1:d4/XK9jQ9F0cR6eY1Q0yQtgIeDyRibnV9qA8zgr5bGk=
+github.com/bitrise-io/appcenter v0.0.0-20201215135847-48a753ceaaa5 h1:pZv0Wu0prk+Qj/NgG90CCiWMcXYVnOeJ6zLp2LsWxaE=
+github.com/bitrise-io/appcenter v0.0.0-20201215135847-48a753ceaaa5/go.mod h1:bf88C/g0R2hfr4vz7sfbAVHHR0mLADQtq1gzKI+LNKs=
 github.com/bitrise-io/go-steputils v0.0.0-20201016102104-03ae3a6ded35 h1:iKtx/RxSrA9xcjZ17W3yu3jMzwowNB6nxLF/1BwVYQ8=
 github.com/bitrise-io/go-steputils v0.0.0-20201016102104-03ae3a6ded35/go.mod h1:GXgBV3Frd3qcnsg+NryQTyx1CHjZHr/2w7Bx4WAcB4o=
 github.com/bitrise-io/go-utils v0.0.0-20201211082830-859032e9adf0 h1:HR5o2gHKo0rAMfKogclAg4KOnEX8XniC7A3JFuEAXjY=
