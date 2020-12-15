@@ -150,6 +150,11 @@ outputs:
       title: Public install page URL
       summary: Public install page URL of the latest version
       description: Public install page URL of the latest version.
+  - APPCENTER_PUBLIC_INSTALL_PAGE_URLS:
+    opts:
+      title: Comma-separated public install pages by groups
+      summary: Comma-separated list of the public install pages URL. 
+      description: When a group is public the step will AppCenter provides and the step exports a public install page URL.
   - APPCENTER_RELEASE_PAGE_URL:
     opts:
       title: Release Page URL
