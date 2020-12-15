@@ -53,7 +53,7 @@ workflows:
           - api_token: $API_TOKEN
           - owner_name: $APPCENTER_APP_OWNER
           - app_name: $APPCENTER_APP_NAME
-          - debug: "false" # Because of the upload
+          - debug: "no" # Because of the upload
           - distribution_group: |-
               Collaborators
               Public
@@ -109,7 +109,7 @@ workflows:
           - api_token: $API_TOKEN
           - owner_name: $APPCENTER_APP_OWNER
           - app_name: $APPCENTER_APP_NAME
-          - debug: "yes"
+          - debug: "no" # Because of the upload
           - release_notes: Bitrise step test
     - script:
         title: Check output envs
