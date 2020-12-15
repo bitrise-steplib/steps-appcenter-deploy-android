@@ -179,6 +179,7 @@ func main() {
 		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URLS"] = strings.Join(groupUrls, ", ")
 	} else {
 		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URL"] = ""
+		outputs["APPCENTER_PUBLIC_INSTALL_PAGE_URLS"] = ""
 	}
 
 	for key, value := range outputs {
