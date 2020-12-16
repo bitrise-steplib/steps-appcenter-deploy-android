@@ -14,6 +14,11 @@ import (
 	"github.com/bitrise-io/appcenter/model"
 )
 
+const (
+	maxAttempts     = 100
+	releaseFailedID = -1
+)
+
 type fileAssetResponse struct {
 	ReleaseID       string `json:"id"`
 	PackageAssetID  string `json:"package_asset_id"`
@@ -300,11 +305,11 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 	statusCode, err := api.Client.jsonRequest(http.MethodPost, assetsURL, nil, &assetResponse)
 	if err != nil {
-		return -1, err
+		return releaseFailedID, err
 	}
 
 	if statusCode != http.StatusCreated {
-		return -1, fmt.Errorf("invalid status code: %d, url: %s", statusCode, assetsURL)
+		return releaseFailedID, fmt.Errorf("invalid status code: %d, url: %s", statusCode, assetsURL)
 	}
 
 	fmt.Println("")
@@ -314,7 +319,7 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 	file := util.LocalFile{FilePath: opts.FilePath}
 	err = file.OpenFile()
 	if err != nil {
-		return -1, err
+		return releaseFailedID, err
 	}
 
 	fileName := file.FileName()
@@ -342,11 +347,11 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 	statusCode, err = api.Client.jsonRequest(http.MethodPost, metadataURL, nil, &metadataResponse)
 	if err != nil {
-		return -1, err
+		return releaseFailedID, err
 	}
 
 	if statusCode != http.StatusOK {
-		return -1, fmt.Errorf("invalid status code: %d, url: %s", statusCode, metadataURL)
+		return releaseFailedID, fmt.Errorf("invalid status code: %d, url: %s", statusCode, metadataURL)
 	}
 
 	fmt.Println("")
@@ -361,7 +366,7 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 	err = api.uploadChunksParallelly(fileChunks, metadataResponse.ChunkList, assetResponse)
 	if err != nil {
-		return -1, err
+		return releaseFailedID, err
 	}
 
 	fmt.Println("")
@@ -377,11 +382,11 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 	statusCode, err = api.Client.jsonRequest(http.MethodPost, uploadFinishedURL, nil, &finishedResponse)
 	if err != nil {
-		return -1, err
+		return releaseFailedID, err
 	}
 
 	if statusCode != http.StatusOK {
-		return -1, fmt.Errorf("invalid status code: %d, url: %s", statusCode, uploadFinishedURL)
+		return releaseFailedID, fmt.Errorf("invalid status code: %d, url: %s", statusCode, uploadFinishedURL)
 	}
 
 	fmt.Println("")
@@ -405,16 +410,16 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 	body, err := api.Client.MarshallContent(releaseBody)
 	if err != nil {
-		return -1, err
+		return releaseFailedID, err
 	}
 
 	statusCode, err = api.Client.jsonRequest(http.MethodPatch, releasePatchURL, body, &releasePatchResponse)
 	if err != nil {
-		return -1, err
+		return releaseFailedID, err
 	}
 
 	if statusCode != http.StatusOK {
-		return -1, fmt.Errorf("invalid status code: %d, url: %s", statusCode, releasePatchURL)
+		return releaseFailedID, fmt.Errorf("invalid status code: %d, url: %s", statusCode, releasePatchURL)
 	}
 
 	fmt.Println("")
@@ -424,9 +429,10 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 	fmt.Println("Waiting for the AppCenter release to getting ready...")
 
 	uploadStatus := "commited"
-	releaseDistinctID := -1
+	releaseDistinctID := releaseFailedID
 	attempts := 1
-	for ok := true; ok; ok = !uploadIsReadyForDeploy(uploadStatus) {
+
+	for !maxAttemptsReached(attempts) {
 		fmt.Println(fmt.Sprintf("Attempt(s): %d", attempts))
 
 		var (
@@ -444,17 +450,23 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 		statusCode, err = api.Client.jsonRequest(http.MethodGet, getURL, nil, &getResponse)
 		if err != nil {
-			return -1, err
+			return releaseFailedID, err
 		}
 
 		if statusCode != http.StatusOK {
-			return -1, fmt.Errorf("invalid status code: %d, url: %s", statusCode, getURL)
+			return releaseFailedID, fmt.Errorf("invalid status code: %d, url: %s", statusCode, getURL)
 		}
 
 		uploadStatus = getResponse.UploadStatus
+		uploadIsReady, err := uploadIsReadyForDeploy(uploadStatus)
+		if err != nil {
+			return releaseFailedID, err
+		}
 
-		if uploadIsReadyForDeploy(uploadStatus) {
+		if uploadIsReady {
 			releaseDistinctID = getResponse.ReleaseDistinctID
+
+			break
 		} else {
 			attempts++
 
@@ -527,6 +539,23 @@ func generateRandomIntBetweenRange(min, max int) int {
 	return rand.Intn(max-min) + min
 }
 
-func uploadIsReadyForDeploy(status string) bool {
-	return status == "readyToBePublished"
+func uploadIsReadyForDeploy(status string) (bool, error) {
+	switch status {
+	case "readyToBePublished":
+		return true, nil
+	case "uploadStarted":
+		return false, nil
+	case "uploadFinished":
+		return false, nil
+	case "malwareDetected":
+		return false, fmt.Errorf("failed to fetch release status: %s", status)
+	case "error":
+		return false, fmt.Errorf("failed to fetch release status: %s", status)
+	default:
+		return false, fmt.Errorf("unknown status: %s", status)
+	}
+}
+
+func maxAttemptsReached(current int) bool {
+	return current >= maxAttempts
 }
