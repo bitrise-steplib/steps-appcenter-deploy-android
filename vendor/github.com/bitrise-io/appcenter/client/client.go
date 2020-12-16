@@ -1,4 +1,4 @@
-package appcenter
+package client
 
 import (
 	"bytes"
@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"mime/multipart"
 	"net/http"
 	"net/http/httputil"
-	"os"
 	"strconv"
+)
+
+const (
+	baseURL = `https://api.appcenter.ms`
 )
 
 type roundTripper struct {
@@ -34,11 +36,6 @@ type Client struct {
 	debug      bool
 }
 
-// Apps ...
-func (c Client) Apps(owner, name string) App {
-	return App{client: c, owner: owner, name: name}
-}
-
 // NewClient returns an AppCenter authenticated client
 func NewClient(token string, debug bool) Client {
 	return Client{
@@ -51,18 +48,15 @@ func NewClient(token string, debug bool) Client {
 	}
 }
 
-func (c Client) jsonRequest(method, url string, body interface{}, response interface{}) (int, error) {
+func (c Client) jsonRequest(method, url string, body []byte, response interface{}) (int, error) {
 	var reader io.Reader
 
 	if body != nil {
-		b, err := json.Marshal(body)
-		if err != nil {
-			return -1, err
-		}
-		reader = bytes.NewReader(b)
+		reader = bytes.NewReader(body)
 	}
 
 	req, err := http.NewRequest(method, url, reader)
+
 	if err != nil {
 		return -1, err
 	}
@@ -107,54 +101,14 @@ func (c Client) jsonRequest(method, url string, body interface{}, response inter
 	return resp.StatusCode, nil
 }
 
-func (c Client) uploadForm(url string, files map[string]string) (int, error) {
-	var (
-		b bytes.Buffer
-		w = multipart.NewWriter(&b)
-	)
-
-	for fileName, filePath := range files {
-		f, err := os.Open(filePath)
-		if err != nil {
-			return -1, err
-		}
-
-		fw, err := w.CreateFormFile(fileName, filePath)
-		if err != nil {
-			return -1, err
-		}
-
-		if _, err = io.Copy(fw, f); err != nil {
-			return -1, err
-		}
-
-		if err := f.Close(); err != nil {
-			return -1, nil
-		}
-	}
-
-	if err := w.Close(); err != nil {
-		return -1, err
-	}
-
-	uploadReq, err := http.NewRequest("POST", url, &b)
+// MarshallContent ...
+func (c Client) MarshallContent(content interface{}) ([]byte, error) {
+	b, err := json.Marshal(content)
 	if err != nil {
-		return -1, err
+		return []byte{}, err
 	}
 
-	uploadReq.Header.Set("Content-Type", w.FormDataContentType())
-
-	resp, err := c.httpClient.Do(uploadReq)
-	if err != nil {
-		return -1, err
-	}
-
-	defer func() {
-		if err := resp.Body.Close(); err != nil {
-		}
-	}()
-
-	return resp.StatusCode, nil
+	return b, err
 }
 
 func (c Client) uploadFile(url string, filePath string) (int, error) {

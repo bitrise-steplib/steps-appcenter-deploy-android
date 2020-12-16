@@ -1,8 +1,4 @@
-package appcenter
-
-const (
-	baseURL = `https://api.appcenter.ms`
-)
+package model
 
 // Error ...
 type Error struct {

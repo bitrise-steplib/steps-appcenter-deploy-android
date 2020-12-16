@@ -1,4 +1,4 @@
-package appcenter
+package model
 
 // Store ...
 type Store struct {

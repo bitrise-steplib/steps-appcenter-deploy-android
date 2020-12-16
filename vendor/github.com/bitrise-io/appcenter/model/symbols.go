@@ -1,4 +1,4 @@
-package appcenter
+package model
 
 // SymbolType ...
 type SymbolType string

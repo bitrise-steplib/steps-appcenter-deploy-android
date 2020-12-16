@@ -2,6 +2,18 @@ format_version: "9"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 
 workflows:
+  vendor-update:
+    title: Vendor update
+    description: |
+      Used for updating the vendored dependencies
+    steps:
+    - script:
+        title: Vendor update
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+            go mod vendor
   test:
     envs:
     - APK_DOWNLOAD_URL: https://raw.githubusercontent.com/bitrise-io/sample-artifacts/master/apks/app-armeabi-v7a-release.apk
@@ -41,7 +53,7 @@ workflows:
           - api_token: $API_TOKEN
           - owner_name: $APPCENTER_APP_OWNER
           - app_name: $APPCENTER_APP_NAME
-          - debug: "yes"
+          - debug: "no" # Because of the upload
           - distribution_group: |-
               Collaborators
               Public
@@ -97,7 +109,7 @@ workflows:
           - api_token: $API_TOKEN
           - owner_name: $APPCENTER_APP_OWNER
           - app_name: $APPCENTER_APP_NAME
-          - debug: "yes"
+          - debug: "no" # Because of the upload
           - release_notes: Bitrise step test
     - script:
         title: Check output envs
