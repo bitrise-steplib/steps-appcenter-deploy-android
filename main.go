@@ -52,8 +52,10 @@ func main() {
 		App:           app,
 	}
 
-	api := client.CreateAPIWithClientParams(string(cfg.APIToken), cfg.Debug)
+	api := client.CreateAPIWithClientParams(string(cfg.APIToken))
 	appAPI := appcenter.CreateApplicationAPI(api, releaseOptions)
+
+	log.SetEnableDebugLog(cfg.Debug)
 
 	log.Infof("Uploading binary")
 
@@ -107,6 +109,8 @@ func main() {
 		if err != nil {
 			failf("Failed to fetch group with name: (%s), error: %s", groupName, err)
 		}
+
+		log.Debugf("%+v", group)
 
 		if group.IsPublic {
 			publicGroup = append(publicGroup, groupName)
