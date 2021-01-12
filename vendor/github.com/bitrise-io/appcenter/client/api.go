@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"path/filepath"
 	"strconv"
 	"sync"
@@ -33,9 +34,9 @@ type API struct {
 }
 
 // CreateAPIWithClientParams ...
-func CreateAPIWithClientParams(token string, debug bool) API {
+func CreateAPIWithClientParams(token string) API {
 	return API{
-		Client: NewClient(token, debug),
+		Client: NewClient(token),
 	}
 }
 
@@ -334,7 +335,7 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 		metadataURL = fmt.Sprintf("%s/upload/set_metadata/%s?file_name=%s&file_size=%s&token=%s",
 			assetResponse.UploadDomain,
 			assetResponse.PackageAssetID,
-			fileName,
+			url.QueryEscape(fileName),
 			strconv.Itoa(fileSize),
 			assetResponse.URLEncodedToken)
 		metadataResponse struct {
