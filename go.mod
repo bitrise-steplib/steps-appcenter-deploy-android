@@ -1,6 +1,6 @@
 module github.com/bitrise-steplib/steps-appcenter-deploy-android
 
-go 1.12
+go 1.15
 
 require (
 	github.com/bitrise-io/appcenter v0.0.0-20210112101706-0a91b78fee7f
