@@ -1,4 +1,4 @@
-# github.com/bitrise-io/appcenter v0.0.0-20210112101706-0a91b78fee7f
+# github.com/bitrise-io/appcenter v0.0.0-20210113093844-897d618265b0
 ## explicit
 github.com/bitrise-io/appcenter
 github.com/bitrise-io/appcenter/client
@@ -19,6 +19,7 @@ github.com/bitrise-io/go-utils/pointers
 # github.com/hashicorp/go-cleanhttp v0.5.1
 github.com/hashicorp/go-cleanhttp
 # github.com/hashicorp/go-retryablehttp v0.6.8
+## explicit
 github.com/hashicorp/go-retryablehttp
 # github.com/kr/pretty v0.1.0
 ## explicit

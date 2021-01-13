@@ -1,5 +1,5 @@
-github.com/bitrise-io/appcenter v0.0.0-20210112101706-0a91b78fee7f h1:FxskGsUNHSwxLIGRiCNk+o5UhD5ILEkIqh2H1i/ZP9Y=
-github.com/bitrise-io/appcenter v0.0.0-20210112101706-0a91b78fee7f/go.mod h1:pOxSsdfXF8hm/57PnzIEWORJWv2e66sd67iNfEPaBPs=
+github.com/bitrise-io/appcenter v0.0.0-20210113093844-897d618265b0 h1:e6jb9K5Oc73MxyNaiKWqZQ/gjew1O4xeA4pIXwxBWJo=
+github.com/bitrise-io/appcenter v0.0.0-20210113093844-897d618265b0/go.mod h1:sckBNZFMsD2KgfOtVlAFj3mGp8QlrqMsJYxNiuxSG3s=
 github.com/bitrise-io/go-steputils v0.0.0-20201016102104-03ae3a6ded35 h1:iKtx/RxSrA9xcjZ17W3yu3jMzwowNB6nxLF/1BwVYQ8=
 github.com/bitrise-io/go-steputils v0.0.0-20201016102104-03ae3a6ded35/go.mod h1:GXgBV3Frd3qcnsg+NryQTyx1CHjZHr/2w7Bx4WAcB4o=
 github.com/bitrise-io/go-utils v0.0.0-20201211082830-859032e9adf0 h1:HR5o2gHKo0rAMfKogclAg4KOnEX8XniC7A3JFuEAXjY=
@@ -9,6 +9,7 @@ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/hashicorp/go-cleanhttp v0.5.1 h1:dH3aiDG9Jvb5r5+bYHsikaOUIpcM0xvgMXVoDkXMzJM=
 github.com/hashicorp/go-cleanhttp v0.5.1/go.mod h1:JpRdi6/HCYpAwUzNwuwqhbovhLtngrth3wmdIIUrZ80=
 github.com/hashicorp/go-hclog v0.9.2/go.mod h1:5CU+agLiy3J7N7QjHK5d05KxGsuXiQLrjA0H7acj2lQ=
+github.com/hashicorp/go-retryablehttp v0.6.6/go.mod h1:vAew36LZh98gCBJNLH42IQ1ER/9wtLZZ8meHqQvEYWY=
 github.com/hashicorp/go-retryablehttp v0.6.8 h1:92lWxgpa+fF3FozM4B3UZtHZMJX8T5XT+TFdCxsPyWs=
 github.com/hashicorp/go-retryablehttp v0.6.8/go.mod h1:vAew36LZh98gCBJNLH42IQ1ER/9wtLZZ8meHqQvEYWY=
 github.com/kisielk/errcheck v1.2.0/go.mod h1:/BMXB+zMLi60iA8Vv6Ksmxu/1UDYcXs4uQLJ+jE2L00=
