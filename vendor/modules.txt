@@ -18,7 +18,7 @@ github.com/bitrise-io/go-utils/pathutil
 github.com/bitrise-io/go-utils/pointers
 # github.com/hashicorp/go-cleanhttp v0.5.1
 github.com/hashicorp/go-cleanhttp
-# github.com/hashicorp/go-retryablehttp v0.6.8
+# github.com/hashicorp/go-retryablehttp v0.6.6
 ## explicit
 github.com/hashicorp/go-retryablehttp
 # github.com/kr/pretty v0.1.0
