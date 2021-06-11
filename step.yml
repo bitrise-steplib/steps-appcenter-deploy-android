@@ -1,7 +1,37 @@
-title: AppCenter Android Deploy
-summary: Deploy your awesome Android app to AppCenter.
+title: "AppCenter Android Deploy"
+summary: |-
+  Distribute your Android app through [Microsoft App Center](https://appcenter.ms/).
+
 description: |-
-  Deploy an Android application to [AppCenter](https://appcenter.ms).
+  [This Step](https://github.com/bitrise-steplib/steps-appcenter-deploy-android) integrates with the [App Center](https://appcenter.ms/)'s Distribution service and enables you to distribute your apps seamlessly to different stores, for example, App Store, MS Intune, user groups or even individual testers.
+
+   ### Configuring the Step
+
+   Before you start:
+
+   The Step requires an active MS App Center account.
+
+   1. Add the **APP path** which points to a binary file.
+   2. Add the **mapping.txt file path**.
+   3. Add the App Center **API token**.
+   4. Add the **Owner name**, which means the owner of the App Center app. For an app owned by a user, the URL in App Center can look like this https://appcenter.ms/users/JoshuaWeber/apps/APIExample where the {ownername} is JoshuaWeber. For an app owned by an organization, the URL can be, for example, https://appcenter.ms/orgs/Microsoft/apps/APIExample where the {ownername} is Microsoft.
+   5. Add the **App name** which is the name of the App Center app. For an app owned by a user, the URL in App Center might look like this: https://appcenter.ms/users/JoshuaWeber/apps/APIExample where the {app_name} is APIExample.
+   6. Add the **Distribution groups** which means the user groups you wish to distribute the app to. Please add one group name per line.
+   7. Add the **Distribution stores** where you wish to distribute the app to. Please add one store name per line.
+   8. Add the **Testers** who you wish to send the app to via email. Please add one email address per line.
+   9. Add any **Release notes for the deployed artifact**.
+   10. Send notification emails to testers and distribution groups with the **Notify Testers** input.
+   11. You can enforce the installation of a distribution version with the **Mandatory** input set to `yes`.
+   12. If you set the **Debug** input to `yes`, you can enable verbose logs.
+
+
+  ### Useful links
+  - [About Android deployment with Bitrise](https://devcenter.bitrise.io/deploy/android-deploy/android-deployment-index/)
+  - [About Android code signing](https://devcenter.bitrise.io/code-signing/android-code-signing/android-code-signing-index/)
+
+  ### Related Steps
+  - [Deploy to Huawei App Gallery](https://www.bitrise.io/integrations/steps/app-gallery-deploy)
+  - [Google Play Deploy](https://www.bitrise.io/integrations/steps/google-play-deploy)
 website: https://github.com/bitrise-steplib/steps-appcenter-deploy-android
 source_code_url: https://github.com/bitrise-steplib/steps-appcenter-deploy-android
 support_url: https://github.com/bitrise-steplib/steps-appcenter-deploy-android/issues
