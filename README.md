@@ -2,6 +2,12 @@
 
 AppCenter Android Deploy
 
+## Distribution groups support
+
+This fork lets you not define any distribution group and grab all available without explicityly setting them.
+
+To use this option `all_distribution_groups` needs to be set to `"yes"` (defaults to `"no"`)
+
 ## How to use this Step
 
 Can be run directly with the [bitrise CLI](https://github.com/bitrise-io/bitrise),

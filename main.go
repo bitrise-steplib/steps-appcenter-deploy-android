@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bitrise-io/appcenter"
-	"github.com/bitrise-io/appcenter/client"
-	"github.com/bitrise-io/appcenter/model"
 	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-steputils/tools"
 	"github.com/bitrise-io/go-utils/log"
+	"github.com/electric-feel/appcenter"
+	"github.com/electric-feel/appcenter/client"
+	"github.com/electric-feel/appcenter/model"
 )
 
 const statusEnvKey = "APPCENTER_DEPLOY_STATUS"

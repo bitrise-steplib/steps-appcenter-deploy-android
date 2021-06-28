@@ -1,9 +1,3 @@
-# github.com/bitrise-io/appcenter v0.0.0-20210113093844-897d618265b0
-## explicit
-github.com/bitrise-io/appcenter
-github.com/bitrise-io/appcenter/client
-github.com/bitrise-io/appcenter/model
-github.com/bitrise-io/appcenter/util
 # github.com/bitrise-io/go-steputils v0.0.0-20201016102104-03ae3a6ded35
 ## explicit
 github.com/bitrise-io/go-steputils/stepconf
@@ -16,6 +10,12 @@ github.com/bitrise-io/go-utils/log
 github.com/bitrise-io/go-utils/parseutil
 github.com/bitrise-io/go-utils/pathutil
 github.com/bitrise-io/go-utils/pointers
+# github.com/electric-feel/appcenter v0.0.0-20210623124750-96f2fcd8d5af
+## explicit
+github.com/electric-feel/appcenter
+github.com/electric-feel/appcenter/client
+github.com/electric-feel/appcenter/model
+github.com/electric-feel/appcenter/util
 # github.com/hashicorp/go-cleanhttp v0.5.1
 github.com/hashicorp/go-cleanhttp
 # github.com/hashicorp/go-retryablehttp v0.6.6

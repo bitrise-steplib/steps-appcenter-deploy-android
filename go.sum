@@ -6,6 +6,8 @@ github.com/bitrise-io/go-utils v0.0.0-20201211082830-859032e9adf0 h1:HR5o2gHKo0r
 github.com/bitrise-io/go-utils v0.0.0-20201211082830-859032e9adf0/go.mod h1:tTEsKvbz1LbzuN/KpVFHXnLtcAPdEgIdM41s0lL407s=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/electric-feel/appcenter v0.0.0-20210623124750-96f2fcd8d5af h1:ZqaDlWgq0yWCuQxzT3WnFWiICafuCquZS+tAEAm8sVo=
+github.com/electric-feel/appcenter v0.0.0-20210623124750-96f2fcd8d5af/go.mod h1:6N5f0T+VkPq84Gz6V72YzYZij78v9+ikES2aWwyYoe0=
 github.com/hashicorp/go-cleanhttp v0.5.1 h1:dH3aiDG9Jvb5r5+bYHsikaOUIpcM0xvgMXVoDkXMzJM=
 github.com/hashicorp/go-cleanhttp v0.5.1/go.mod h1:JpRdi6/HCYpAwUzNwuwqhbovhLtngrth3wmdIIUrZ80=
 github.com/hashicorp/go-hclog v0.9.2/go.mod h1:5CU+agLiy3J7N7QjHK5d05KxGsuXiQLrjA0H7acj2lQ=
