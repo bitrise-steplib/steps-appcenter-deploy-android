@@ -42,6 +42,7 @@ func main() {
 	app := model.App{
 		Owner:   cfg.OwnerName,
 		AppName: cfg.AppName,
+		AppType: model.AppTypeAndroid,
 	}
 
 	releaseOptions := model.ReleaseOptions{
