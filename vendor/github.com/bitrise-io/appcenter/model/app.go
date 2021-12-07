@@ -4,4 +4,5 @@ package model
 type App struct {
 	Owner   string
 	AppName string
+	AppType AppType
 }

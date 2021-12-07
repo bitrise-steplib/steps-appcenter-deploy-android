@@ -332,12 +332,13 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 	fmt.Println(fmt.Sprintf("- File size: %s", strconv.Itoa(fileSize)))
 
 	var (
-		metadataURL = fmt.Sprintf("%s/upload/set_metadata/%s?file_name=%s&file_size=%s&token=%s",
+		metadataURL = fmt.Sprintf("%s/upload/set_metadata/%s?file_name=%s&file_size=%s&token=%s&content_type=%s",
 			assetResponse.UploadDomain,
 			assetResponse.PackageAssetID,
 			url.QueryEscape(fileName),
 			strconv.Itoa(fileSize),
-			assetResponse.URLEncodedToken)
+			assetResponse.URLEncodedToken,
+			getContentType(opts.App.AppType))
 		metadataResponse struct {
 			ID             string `json:"id"`
 			ChunkSize      int    `json:"chunk_size"`
@@ -482,6 +483,17 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 	fmt.Println(fmt.Sprintf("Release created with ID: %d", releaseDistinctID))
 
 	return releaseDistinctID, nil
+}
+
+func getContentType(appType model.AppType) (string) {
+	switch appType {
+	case model.AppTypeAndroid:
+		return "application/vnd.android.package-archive"
+	case model.AppTypeiOS:
+		return "application/octet-stream"
+	default:
+		return ""
+	}
 }
 
 func (api API) uploadChunksParallelly(fileChunks [][]byte, chunkIDs []int, assetResponse fileAssetResponse) (retErr error) {
