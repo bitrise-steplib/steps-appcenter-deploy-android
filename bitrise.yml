@@ -57,6 +57,7 @@ workflows:
           - distribution_group: |-
               Collaborators
               Public
+          - all_distribution_groups: "no"
           - mapping_path: $MAPPING_PATH
           - distribution_tester: tooling.bot@bitrise.io
           - release_notes: Bitrise step test

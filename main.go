@@ -26,6 +26,7 @@ type config struct {
 	MappingPath        string          `env:"mapping_path"`
 	ReleaseNotes       string          `env:"release_notes"`
 	NotifyTesters      bool            `env:"notify_testers,required"`
+	DistributeAllGroup bool            `env:"all_distribution_groups"`
 	DistributionGroup  string          `env:"distribution_group"`
 	DistributionStore  string          `env:"distribution_store"`
 	DistributionTester string          `env:"distribution_tester"`
@@ -98,23 +99,49 @@ func main() {
 	log.Infof("Gatehering public group(s)")
 
 	var publicGroup []string
-	for _, groupName := range releaseOptions.GroupNames {
-		groupName = strings.TrimSpace(groupName)
-		if len(groupName) == 0 {
-			continue
-		}
+	if cfg.DistributeAllGroup {
+		log.Infof("Gatehering all public group(s)")
 
-		log.Printf("- %s", groupName)
-
-		group, err := appAPI.Groups(groupName)
+		groups, err := appAPI.AllGroups()
 		if err != nil {
-			failf("Failed to fetch group with name: (%s), error: %s", groupName, err)
+			failf("Failed to fetch groups, error: %s", err)
 		}
 
-		log.Debugf("%+v", group)
+		for _, group := range groups {
+			if err := releaseAPI.AddGroup(group); err != nil {
+				failf("Failed to add group(%s) to the release, error: %s", group.DisplayName, err)
+			}
 
-		if group.IsPublic {
-			publicGroup = append(publicGroup, groupName)
+			if group.IsPublic {
+				publicGroup = append(publicGroup, group.DisplayName)
+			}
+		}
+	} else {
+		log.Infof("Gatehering config public group(s)")
+
+		err = releaseAPI.AddGroupsToRelease(releaseOptions.GroupNames)
+		if err != nil {
+			failf("Failed to set groups on the release %s, groups: %s, error: %s", release.ID, releaseOptions.GroupNames, err)
+		}
+
+		for _, groupName := range releaseOptions.GroupNames {
+			groupName = strings.TrimSpace(groupName)
+			if len(groupName) == 0 {
+				continue
+			}
+
+			log.Printf("- %s", groupName)
+
+			group, err := appAPI.Groups(groupName)
+			if err != nil {
+				failf("Failed to fetch group with name: (%s), error: %s", groupName, err)
+			}
+
+			log.Debugf("%+v", group)
+
+			if group.IsPublic {
+				publicGroup = append(publicGroup, groupName)
+			}
 		}
 	}
 

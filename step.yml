@@ -152,6 +152,13 @@ inputs:
       description: Enable verbose logs
       value_options: ["no", "yes"]
       is_required: true
+  - all_distribution_groups: "no"
+    opts:
+      title: All distribution groups
+      summary: Distribute the app to all user groups on that app.
+      description: |-
+        Distribute the app to all user groups on that app. Enabling this options makes it ignore distribution_group.
+      value_options: ["no", "yes"]
 
 outputs:
   - APPCENTER_DEPLOY_STATUS:
