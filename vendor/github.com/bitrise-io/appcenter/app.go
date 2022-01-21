@@ -40,6 +40,11 @@ func (a AppAPI) Groups(name string) (model.Group, error) {
 	return a.API.GetGroupByName(name, a.ReleaseOptions.App)
 }
 
+// AllGroups ...
+func (a AppAPI) AllGroups() ([]model.Group, error) {
+	return a.API.GetAllGroups(a.ReleaseOptions.App)
+}
+
 // Stores ...
 func (a AppAPI) Stores(name string) (model.Store, error) {
 	return a.API.GetStore(name, a.ReleaseOptions.App)

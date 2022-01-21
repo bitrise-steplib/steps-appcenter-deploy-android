@@ -79,6 +79,25 @@ func (api API) GetGroupByName(groupName string, app model.App) (model.Group, err
 	return getResponse, err
 }
 
+// GetAllGroups ...
+func (api API) GetAllGroups(app model.App) ([]model.Group, error) {
+	var (
+		getURL      = fmt.Sprintf("%s/v0.1/apps/%s/%s/distribution_groups", baseURL, app.Owner, app.AppName)
+		getResponse []model.Group
+	)
+
+	statusCode, err := api.Client.jsonRequest(http.MethodGet, getURL, nil, &getResponse)
+	if err != nil {
+		return []model.Group{}, err
+	}
+
+	if statusCode != http.StatusOK {
+		return []model.Group{}, fmt.Errorf("invalid status code: %d, url: %s, body: %v", statusCode, getURL, getResponse)
+	}
+
+	return getResponse, nil
+}
+
 // GetStore ...
 func (api API) GetStore(storeName string, app model.App) (model.Store, error) {
 	var (
@@ -485,7 +504,7 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 	return releaseDistinctID, nil
 }
 
-func getContentType(appType model.AppType) (string) {
+func getContentType(appType model.AppType) string {
 	switch appType {
 	case model.AppTypeAndroid:
 		return "application/vnd.android.package-archive"
