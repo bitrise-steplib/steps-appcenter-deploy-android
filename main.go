@@ -71,6 +71,15 @@ func main() {
 
 	releaseAPI := appcenter.CreateReleaseAPI(api, release, releaseOptions)
 
+	if len(cfg.ReleaseNotes) > 0 {
+		log.Infof("Setting release notes")
+		if err := releaseAPI.SetReleaseNote(cfg.ReleaseNotes); err != nil {
+			failf("Failed to set release note, error: %s", err)
+		}
+		log.Donef("- Done")
+		fmt.Println()
+	}
+
 	log.Infof("Setting distribution group(s)")
 
 	err = releaseAPI.AddGroupsToRelease(releaseOptions.GroupNames)
@@ -82,15 +91,6 @@ func main() {
 		log.Infof("Uploading mapping file")
 		if err := releaseAPI.UploadSymbol(cfg.MappingPath); err != nil {
 			failf("Failed to upload symbol file(%s), error: %s", cfg.MappingPath, err)
-		}
-		log.Donef("- Done")
-		fmt.Println()
-	}
-
-	if len(cfg.ReleaseNotes) > 0 {
-		log.Infof("Setting release notes")
-		if err := releaseAPI.SetReleaseNote(cfg.ReleaseNotes); err != nil {
-			failf("Failed to set release note, error: %s", err)
 		}
 		log.Donef("- Done")
 		fmt.Println()

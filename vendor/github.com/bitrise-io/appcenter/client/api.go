@@ -225,7 +225,7 @@ func (api API) SetReleaseNoteOnRelease(releaseNote string, releaseID int, opts m
 		return err
 	}
 
-	statusCode, err := api.Client.jsonRequest(http.MethodPut, putURL, body, nil)
+	statusCode, err := api.Client.jsonRequest(http.MethodPatch, putURL, body, nil)
 	if err != nil {
 		return err
 	}
