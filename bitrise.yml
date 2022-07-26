@@ -1,20 +1,22 @@
-format_version: "9"
+format_version: "11"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 
+app:
+  envs:
+  - ORIG_BITRISE_SOURCE_DIR: $BITRISE_SOURCE_DIR
+
 workflows:
-  vendor-update:
-    title: Vendor update
-    description: |
-      Used for updating the vendored dependencies
+  check:
     steps:
-    - script:
-        title: Vendor update
+    - git::https://github.com/bitrise-steplib/steps-check.git: { }
+
+  e2e:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-check.git:
         inputs:
-        - content: |-
-            #!/bin/bash
-            set -ex
-            go mod vendor
-  test:
+        - workflow: e2e
+
+  sample:
     envs:
     - APK_DOWNLOAD_URL: https://raw.githubusercontent.com/bitrise-io/sample-artifacts/master/apks/app-armeabi-v7a-release.apk
     - APK_PATH: app-debug.apk
@@ -25,10 +27,6 @@ workflows:
     - APPCENTER_APP_NAME: steps-appcenter-deploy-android
     - APPCENTER_APP_OWNER: app-center-bot
     steps:
-    - go-list:
-    - golint:
-    - errcheck:
-    - go-test:
     - script:
         title: Clean _tmp
         inputs:
@@ -61,89 +59,9 @@ workflows:
           - mapping_path: $MAPPING_PATH
           - distribution_tester: tooling.bot@bitrise.io
           - release_notes: Bitrise step test
-    - script:
-        title: Check output envs
+
+  generate_readme:
+    steps:
+    - git::https://github.com/bitrise-steplib/steps-readme-generator.git@main:
         inputs:
-          - content: |-
-              #!/bin/bash
-              set -ex
-
-              if [ -z $APPCENTER_DEPLOY_INSTALL_URL ]
-              then
-                echo "ERROR: APPCENTER_DEPLOY_INSTALL_URL variable empty"
-                exit 1
-              fi
-
-              if [ -z $APPCENTER_DEPLOY_DOWNLOAD_URL ];
-              then
-                echo "ERROR: APPCENTER_DEPLOY_DOWNLOAD_URL variable empty"
-                exit 1
-              fi
-
-              if [ -z $APPCENTER_PUBLIC_INSTALL_PAGE_URL ]
-              then
-                echo "ERROR: APPCENTER_PUBLIC_INSTALL_PAGE_URL variable empty"
-                exit 1
-              fi
-
-              if [ "$APPCENTER_DEPLOY_STATUS" != "success" ]
-              then
-                echo "ERROR: APPCENTER_DEPLOY_STATUS variable is $APPCENTER_DEPLOY_STATUS"
-                exit 1
-              fi
-
-              if [ -z $APPCENTER_RELEASE_PAGE_URL ]
-              then
-                echo "ERROR: APPCENTER_RELEASE_PAGE_URL variable empty"
-                exit 1
-              fi
-
-              envman add --key "APPCENTER_DEPLOY_INSTALL_URL" --value ""
-              envman add --key "APPCENTER_DEPLOY_DOWNLOAD_URL" --value ""
-              envman add --key "APPCENTER_PUBLIC_INSTALL_PAGE_URL" --value ""
-              envman add --key "APPCENTER_DEPLOY_STATUS" --value ""
-              envman add --key "APPCENTER_RELEASE_PAGE_URL" --value ""
-
-    - path::./:
-        inputs:
-          - app_path: $AAB_PATH
-          - api_token: $API_TOKEN
-          - owner_name: $APPCENTER_APP_OWNER
-          - app_name: $APPCENTER_APP_NAME
-          - debug: "no" # Because of the upload
-          - release_notes: Bitrise step test
-    - script:
-        title: Check output envs
-        inputs:
-          - content: |-
-              #!/bin/bash
-              set -ex
-
-              if [ -z $APPCENTER_DEPLOY_INSTALL_URL ]
-              then
-                echo "ERROR: APPCENTER_DEPLOY_INSTALL_URL variable empty"
-                exit 1
-              fi
-
-              if [ -z $APPCENTER_DEPLOY_DOWNLOAD_URL ];
-              then
-                echo "ERROR: APPCENTER_DEPLOY_DOWNLOAD_URL variable empty"
-                exit 1
-              fi
-
-              if [ -z $APPCENTER_DEPLOY_RELEASE_ID ];
-              then
-                echo "ERROR: APPCENTER_DEPLOY_RELEASE_ID variable empty"
-                exit 1
-              fi
-
-              if [ "$APPCENTER_DEPLOY_STATUS" != "success" ]
-              then
-                echo "ERROR: APPCENTER_DEPLOY_STATUS variable is $APPCENTER_DEPLOY_STATUS"
-                exit 1
-              fi
-
-              envman add --key "APPCENTER_DEPLOY_INSTALL_URL" --value ""
-              envman add --key "APPCENTER_DEPLOY_DOWNLOAD_URL" --value ""
-              envman add --key "APPCENTER_DEPLOY_RELEASE_ID" --value ""
-              envman add --key "APPCENTER_DEPLOY_STATUS" --value ""
+        - example_section: docs/examples.md
