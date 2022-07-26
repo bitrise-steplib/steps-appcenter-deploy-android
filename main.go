@@ -74,7 +74,7 @@ func main() {
 	// We think there is a limitation in the App Center API where release notes can only be modified
 	// after a release has been created (using separate endpoints). This leads to a race condition
 	// where the generated email for the release does not necessarily contain the release notes
-	// because it was added later via a separate API call. Anecdotally, this timing issue can be somewhat mitagated
+	// because it was added later via a separate API call. Anecdotally, this timing issue can be somewhat mitigated
 	// by adding the release notes as soon as possible after the release was created (i.e. calling the endpoints right after each other).
 	// In the future, we should investigate if there is a solution for updating the release notes reliably,
 	// or switch entirely to the App Center CLI which might be able to handle this correctly.
