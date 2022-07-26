@@ -53,13 +53,13 @@ toolkit:
     package_name: github.com/bitrise-steplib/steps-appcenter-deploy-android
 
 inputs:
-- app_path: "$BITRISE_APP_PATH"
+- app_path: $BITRISE_APP_PATH
   opts:
     title: APP path
     summary: Path to binary file
     description: |-
       Path to binary file
-      
+
       For APKs, only single or universal APKs are supported: https://docs.microsoft.com/en-us/appcenter/build/react-native/android/#63-building-multiple-apks
 
     is_required: true
@@ -83,7 +83,7 @@ inputs:
       Owner of the App Center app.
 
       For an app owned by a user, the URL in App Center might look like https://appcenter.ms/users/JoshuaWeber/apps/APIExample.
-      
+
       Here, the {owner_name} is JoshuaWeber. For an app owned by an org, the URL might be
       https://appcenter.ms/orgs/Microsoft/apps/APIExample and the {owner_name} would be Microsoft
 
@@ -96,7 +96,7 @@ inputs:
       The name of the App Center app.
 
       For an app owned by a user, the URL in App Center might look like https://appcenter.ms/users/JoshuaWeber/apps/APIExample.
-      
+
       Here, the {app_name} is ApiExample.
 
     is_required: true
@@ -124,7 +124,7 @@ inputs:
       List of individual testers. One email per line.
 
       Distribution of AAB is supported only for Google Play store deployment: https://docs.microsoft.com/en-us/appcenter/distribution/uploading#android
-- release_notes: "Release notes"
+- release_notes: Release notes
   opts:
     title: Release notes text
     summary: Release notes text
@@ -188,7 +188,7 @@ outputs:
 - APPCENTER_PUBLIC_INSTALL_PAGE_URLS:
   opts:
     title: Comma-separated public install pages by groups
-    summary: Comma-separated list of the public install pages URL. 
+    summary: Comma-separated list of the public install pages URL.
     description: When a group is public the step will AppCenter provides and the step exports a public install page URL.
 - APPCENTER_RELEASE_PAGE_URL:
   opts:
