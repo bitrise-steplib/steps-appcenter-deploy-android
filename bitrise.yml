@@ -64,4 +64,4 @@ workflows:
     steps:
     - git::https://github.com/bitrise-steplib/steps-readme-generator.git@main:
         inputs:
-        - example_section: docs/examples.md
+        - contrib_section: docs/contribution.md
