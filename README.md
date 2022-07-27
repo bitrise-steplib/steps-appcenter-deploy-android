@@ -1,97 +1,93 @@
-# steps-appcenter-deploy-android
+# AppCenter Android Deploy
 
-AppCenter Android Deploy
+[![Step changelog](https://shields.io/github/v/release/bitrise-steplib/steps-appcenter-deploy-android?include_prereleases&label=changelog&color=blueviolet)](https://github.com/bitrise-steplib/steps-appcenter-deploy-android/releases)
 
-## How to use this Step
+Distribute your Android app through [Microsoft App Center](https://appcenter.ms/).
 
-Can be run directly with the [bitrise CLI](https://github.com/bitrise-io/bitrise),
-just `git clone` this repository, `cd` into it's folder in your Terminal/Command Line
-and call `bitrise run test`.
+<details>
+<summary>Description</summary>
 
-*Check the `bitrise.yml` file for required inputs which have to be
-added to your `.bitrise.secrets.yml` file!*
+[This Step](https://github.com/bitrise-steplib/steps-appcenter-deploy-android) integrates with the [App Center](https://appcenter.ms/)'s Distribution service and enables you to distribute your apps seamlessly to different stores, for example, App Store, MS Intune, user groups or even individual testers.
 
-Step by step:
+ ### Configuring the Step
 
-1. Open up your Terminal / Command Line
-2. `git clone` the repository
-3. `cd` into the directory of the step (the one you just `git clone`d)
-5. Create a `.bitrise.secrets.yml` file in the same directory of `bitrise.yml`
-   (the `.bitrise.secrets.yml` is a git ignored file, you can store your secrets in it)
-6. Check the `bitrise.yml` file for any secret you should set in `.bitrise.secrets.yml`
-  * Best practice is to mark these options with something like `# define these in your .bitrise.secrets.yml`, in the `app:envs` section.
-7. Once you have all the required secret parameters in your `.bitrise.secrets.yml` you can just run this step with the [bitrise CLI](https://github.com/bitrise-io/bitrise): `bitrise run test`
+ Before you start:
 
-An example `.bitrise.secrets.yml` file:
+ The Step requires an active MS App Center account.
 
-```
-envs:
-- A_SECRET_PARAM_ONE: the value for secret one
-- A_SECRET_PARAM_TWO: the value for secret two
-```
+ 1. Add the **APP path** which points to a binary file.
+ 2. Add the **mapping.txt file path**.
+ 3. Add the App Center **API token**.
+ 4. Add the **Owner name**, which means the owner of the App Center app. For an app owned by a user, the URL in App Center can look like this https://appcenter.ms/users/JoshuaWeber/apps/APIExample where the {ownername} is JoshuaWeber. For an app owned by an organization, the URL can be, for example, https://appcenter.ms/orgs/Microsoft/apps/APIExample where the {ownername} is Microsoft.
+ 5. Add the **App name** which is the name of the App Center app. For an app owned by a user, the URL in App Center might look like this: https://appcenter.ms/users/JoshuaWeber/apps/APIExample where the {app_name} is APIExample.
+ 6. Add the **Distribution groups** which means the user groups you wish to distribute the app to. Please add one group name per line.
+ 7. Add the **Distribution stores** where you wish to distribute the app to. Please add one store name per line.
+ 8. Add the **Testers** who you wish to send the app to via email. Please add one email address per line.
+ 9. Add any **Release notes for the deployed artifact**.
+ 10. Send notification emails to testers and distribution groups with the **Notify Testers** input.
+ 11. You can enforce the installation of a distribution version with the **Mandatory** input set to `yes`.
+ 12. If you set the **Debug** input to `yes`, you can enable verbose logs.
 
-## How to create your own step
+### Useful links
+- [About Android deployment with Bitrise](https://devcenter.bitrise.io/deploy/android-deploy/android-deployment-index/)
+- [About Android code signing](https://devcenter.bitrise.io/code-signing/android-code-signing/android-code-signing-index/)
 
-1. Create a new git repository for your step (**don't fork** the *step template*, create a *new* repository)
-2. Copy the [step template](https://github.com/bitrise-steplib/step-template) files into your repository
-3. Fill the `step.sh` with your functionality
-4. Wire out your inputs to `step.yml` (`inputs` section)
-5. Fill out the other parts of the `step.yml` too
-6. Provide test values for the inputs in the `bitrise.yml`
-7. Run your step with `bitrise run test` - if it works, you're ready
+### Related Steps
+- [Deploy to Huawei App Gallery](https://www.bitrise.io/integrations/steps/app-gallery-deploy)
+- [Google Play Deploy](https://www.bitrise.io/integrations/steps/google-play-deploy)
+</details>
 
-__For Step development guidelines & best practices__ check this documentation: [https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md](https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md).
+## 🧩 Get started
 
-**NOTE:**
+Add this step directly to your workflow in the [Bitrise Workflow Editor](https://devcenter.bitrise.io/steps-and-workflows/steps-and-workflows-index/).
 
-If you want to use your step in your project's `bitrise.yml`:
+You can also run this step directly with [Bitrise CLI](https://github.com/bitrise-io/bitrise).
 
-1. git push the step into it's repository
-2. reference it in your `bitrise.yml` with the `git::PUBLIC-GIT-CLONE-URL@BRANCH` step reference style:
+## ⚙️ Configuration
 
-```
-- git::https://github.com/user/my-step.git@branch:
-   title: My step
-   inputs:
-   - my_input_1: "my value 1"
-   - my_input_2: "my value 2"
-```
+<details>
+<summary>Inputs</summary>
 
-You can find more examples of step reference styles
-in the [bitrise CLI repository](https://github.com/bitrise-io/bitrise/blob/master/_examples/tutorials/steps-and-workflows/bitrise.yml#L65).
+| Key | Description | Flags | Default |
+| --- | --- | --- | --- |
+| `app_path` | Path to binary file  For APKs, only single or universal APKs are supported: https://docs.microsoft.com/en-us/appcenter/build/react-native/android/#63-building-multiple-apks | required | `$BITRISE_APP_PATH` |
+| `mapping_path` | Path to an Android mapping.txt file. |  |  |
+| `api_token` | App Center API token | required, sensitive |  |
+| `owner_name` | Owner of the App Center app.  For an app owned by a user, the URL in App Center might look like https://appcenter.ms/users/JoshuaWeber/apps/APIExample.  Here, the {owner_name} is JoshuaWeber. For an app owned by an org, the URL might be https://appcenter.ms/orgs/Microsoft/apps/APIExample and the {owner_name} would be Microsoft | required |  |
+| `app_name` | The name of the App Center app.  For an app owned by a user, the URL in App Center might look like https://appcenter.ms/users/JoshuaWeber/apps/APIExample.  Here, the {app_name} is ApiExample. | required |  |
+| `distribution_group` | User groups you wish to distribute the app. One group name per line.  Distribution of AAB is supported only for Google Play store deployment: https://docs.microsoft.com/en-us/appcenter/distribution/uploading#android |  |  |
+| `distribution_store` | Distribution stores you wish to distribute the app. One store name per line.  Distribution of AAB is supported only for Google Play store deployment: https://docs.microsoft.com/en-us/appcenter/distribution/uploading#android |  |  |
+| `distribution_tester` | List of individual testers. One email per line.  Distribution of AAB is supported only for Google Play store deployment: https://docs.microsoft.com/en-us/appcenter/distribution/uploading#android |  |  |
+| `release_notes` | Additional notes for the deployed artifact. |  | `Release notes` |
+| `notify_testers` | Send notification email to testers and distribution groups. | required | `yes` |
+| `mandatory` | Enforce installation of distribution version. Requires SDK integration. | required | `no` |
+| `debug` | Enable verbose logs | required | `no` |
+| `all_distribution_groups` | Distribute the app to all user groups on that app. Enabling this options makes it ignore distribution_group. |  | `no` |
+</details>
 
-## How to contribute to this Step
+<details>
+<summary>Outputs</summary>
 
-1. Fork this repository
-2. `git clone` it
-3. Create a branch you'll work on
-4. To use/test the step just follow the **How to use this Step** section
-5. Do the changes you want to
-6. Run/test the step before sending your contribution
-  * You can also test the step in your `bitrise` project, either on your Mac or on [bitrise.io](https://www.bitrise.io)
-  * You just have to replace the step ID in your project's `bitrise.yml` with either a relative path, or with a git URL format
-  * (relative) path format: instead of `- original-step-id:` use `- path::./relative/path/of/script/on/your/Mac:`
-  * direct git URL format: instead of `- original-step-id:` use `- git::https://github.com/user/step.git@branch:`
-  * You can find more example of alternative step referencing at: https://github.com/bitrise-io/bitrise/blob/master/_examples/tutorials/steps-and-workflows/bitrise.yml
-7. Once you're done just commit your changes & create a Pull Request
+| Environment Variable | Description |
+| --- | --- |
+| `APPCENTER_DEPLOY_STATUS` | Deployment status: 'success' or 'failed' |
+| `APPCENTER_DEPLOY_INSTALL_URL` | Install page URL of the newly deployed version. |
+| `APPCENTER_DEPLOY_DOWNLOAD_URL` | Download URL of the newly deployed version. |
+| `APPCENTER_DEPLOY_RELEASE_ID` | ID of the new release for later retrieval via App Center APIs. |
+| `APPCENTER_PUBLIC_INSTALL_PAGE_URL` | Public install page URL of the latest version. |
+| `APPCENTER_PUBLIC_INSTALL_PAGE_URLS` | When a group is public the step will AppCenter provides and the step exports a public install page URL. |
+| `APPCENTER_RELEASE_PAGE_URL` | URL to the release page containing release notes, easily share with business partners and QA for testing. |
+</details>
 
+## 🙋 Contributing
 
-## Share your own Step
+We welcome [pull requests](https://github.com/bitrise-steplib/steps-appcenter-deploy-android/pulls) and [issues](https://github.com/bitrise-steplib/steps-appcenter-deploy-android/issues) against this repository.
 
-You can share your Step or step version with the [bitrise CLI](https://github.com/bitrise-io/bitrise). If you use the `bitrise.yml` included in this repository, all you have to do is:
+For pull requests, work on your changes in a forked repository and use the Bitrise CLI to [run step tests locally](https://devcenter.bitrise.io/bitrise-cli/run-your-first-build/).
 
-1. In your Terminal / Command Line `cd` into this directory (where the `bitrise.yml` of the step is located)
-1. Run: `bitrise run test` to test the step
-1. Run: `bitrise run audit-this-step` to audit the `step.yml`
-1. Check the `share-this-step` workflow in the `bitrise.yml`, and fill out the
-   `envs` if you haven't done so already (don't forget to bump the version number if this is an update
-   of your step!)
-1. Then run: `bitrise run share-this-step` to share the step (version) you specified in the `envs`
-1. Send the Pull Request, as described in the logs of `bitrise run share-this-step`
+**Note:** this step's end-to-end tests (defined in `e2e/bitrise.yml`) are working with secrets which are intentionally not stored in this repo. External contributors won't be able to run those tests. Don't worry, if you open a PR with your contribution, we will help with running tests and make sure that they pass.
 
-That's all ;)
+Learn more about developing steps:
 
-## Trigger a new release
-
-- __merge every code changes__ to the `master` branch
-- __push the new version tag__ to the `master` branch
+- [Create your own step](https://devcenter.bitrise.io/contributors/create-your-own-step/)
+- [Testing your Step](https://devcenter.bitrise.io/contributors/testing-and-versioning-your-steps/)

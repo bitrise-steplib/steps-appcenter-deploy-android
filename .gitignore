@@ -2,3 +2,4 @@
 _tmp
 .vscode
 .bitrise.secrets.yml
+.idea/
