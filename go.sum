@@ -1,5 +1,5 @@
-github.com/bitrise-io/appcenter v0.0.0-20220121122853-f0460b7698d0 h1:lWs5u3T7FlJbkbfEzWhUu/76KGxWZtJeOm6JfDjnGqc=
-github.com/bitrise-io/appcenter v0.0.0-20220121122853-f0460b7698d0/go.mod h1:sckBNZFMsD2KgfOtVlAFj3mGp8QlrqMsJYxNiuxSG3s=
+github.com/bitrise-io/appcenter v0.0.0-20230725125548-ca0bc457dfac h1:MfeWV1xv82TwZiqZysgrGuSQF5WhJF3RHBUub03PlFk=
+github.com/bitrise-io/appcenter v0.0.0-20230725125548-ca0bc457dfac/go.mod h1:sckBNZFMsD2KgfOtVlAFj3mGp8QlrqMsJYxNiuxSG3s=
 github.com/bitrise-io/go-steputils v0.0.0-20201016102104-03ae3a6ded35 h1:iKtx/RxSrA9xcjZ17W3yu3jMzwowNB6nxLF/1BwVYQ8=
 github.com/bitrise-io/go-steputils v0.0.0-20201016102104-03ae3a6ded35/go.mod h1:GXgBV3Frd3qcnsg+NryQTyx1CHjZHr/2w7Bx4WAcB4o=
 github.com/bitrise-io/go-utils v0.0.0-20201211082830-859032e9adf0 h1:HR5o2gHKo0rAMfKogclAg4KOnEX8XniC7A3JFuEAXjY=

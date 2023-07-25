@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +11,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/bitrise-io/go-utils/log"
 	"github.com/hashicorp/go-retryablehttp"
 )
 
@@ -45,6 +47,16 @@ func NewClient(token string) Client {
 	retClient.RetryWaitMin = 5 * time.Second
 	retClient.RetryWaitMax = 10 * time.Second
 
+	retClient.CheckRetry = func(ctx context.Context, resp *http.Response, err error) (bool, error) {
+		ok, e := retryablehttp.DefaultRetryPolicy(ctx, resp, err)
+		if !ok && resp.StatusCode == http.StatusUnauthorized {
+			return true, e
+		}
+
+		return ok, e
+	}
+	retClient.ErrorHandler = retryablehttp.PassthroughErrorHandler
+
 	retClient.HTTPClient.Transport = &roundTripper{
 		token: token,
 	}
@@ -73,11 +85,20 @@ func (c Client) jsonRequest(method, url string, body []byte, response interface{
 	}
 
 	defer func() {
-		if err := resp.Body.Close(); err != nil {
+		if resp != nil {
+			if err := resp.Body.Close(); err != nil {
+				log.Warnf("failed to close body: %s", err)
+			}
 		}
 	}()
 
-	if response != nil {
+	if resp != nil {
+		if resp.Request.Header.Get("x-api-token") == "" {
+			log.Errorf("Authorization token missing from request.")
+		}
+	}
+
+	if resp != nil && response != nil {
 		rb, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return -1, err
