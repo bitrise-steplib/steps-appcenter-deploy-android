@@ -5,6 +5,7 @@ app:
   envs:
   - APPCENTER_TOKEN: $APPCENTER_TOKEN
 
+
 workflows:
   test_deploy_apk_and_aab:
     envs:
