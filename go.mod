@@ -3,7 +3,7 @@ module github.com/bitrise-steplib/steps-appcenter-deploy-android
 go 1.18
 
 require (
-	github.com/bitrise-io/appcenter v0.0.0-20230802145959-754c46bc730d
+	github.com/bitrise-io/appcenter v1.0.0
 	github.com/bitrise-io/go-steputils v1.0.5
 	github.com/bitrise-io/go-utils v1.0.9
 )

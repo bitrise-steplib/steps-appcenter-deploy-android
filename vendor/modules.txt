@@ -1,4 +1,4 @@
-# github.com/bitrise-io/appcenter v0.0.0-20230802145959-754c46bc730d
+# github.com/bitrise-io/appcenter v1.0.0
 ## explicit; go 1.12
 github.com/bitrise-io/appcenter
 github.com/bitrise-io/appcenter/client
