@@ -1,4 +1,4 @@
-# github.com/bitrise-io/appcenter v0.0.0-20230725125548-ca0bc457dfac
+# github.com/bitrise-io/appcenter v0.0.0-20230802124647-5be1c270f79c
 ## explicit
 github.com/bitrise-io/appcenter
 github.com/bitrise-io/appcenter/client
@@ -8,7 +8,7 @@ github.com/bitrise-io/appcenter/util
 ## explicit
 github.com/bitrise-io/go-steputils/stepconf
 github.com/bitrise-io/go-steputils/tools
-# github.com/bitrise-io/go-utils v1.0.8
+# github.com/bitrise-io/go-utils v1.0.9
 ## explicit
 github.com/bitrise-io/go-utils/colorstring
 github.com/bitrise-io/go-utils/command
@@ -17,20 +17,11 @@ github.com/bitrise-io/go-utils/parseutil
 github.com/bitrise-io/go-utils/pathutil
 github.com/bitrise-io/go-utils/pointers
 # github.com/hashicorp/go-cleanhttp v0.5.2
-## explicit
 github.com/hashicorp/go-cleanhttp
 # github.com/hashicorp/go-retryablehttp v0.7.4
 ## explicit
 github.com/hashicorp/go-retryablehttp
-# github.com/kisielk/errcheck v1.2.0
-## explicit
 # github.com/kr/pretty v0.1.0
 ## explicit
-# golang.org/x/lint v0.0.0-20200130185559-910be7a94367
-## explicit
-# golang.org/x/tools v0.0.0-20200220224806-8a925fa4c0df
-## explicit
 # gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127
-## explicit
-# gopkg.in/yaml.v2 v2.4.0
 ## explicit

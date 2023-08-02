@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"strconv"
 	"time"
 
@@ -98,11 +99,27 @@ func (c Client) jsonRequest(method, url string, body []byte, response interface{
 		}
 	}
 
+	reqDump, err := httputil.DumpRequestOut(resp.Request, true)
+	if err != nil {
+		log.TWarnf("failed to dump request: %v", err)
+	}
+	log.TInfof("Request: %s", reqDump)
+
 	if resp != nil && response != nil {
 		rb, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return -1, err
 		}
+
+		respDump, err := httputil.DumpResponse(resp, true)
+		if err != nil {
+			log.TWarnf("failed to dump response: %s", err)
+			respDump, err = httputil.DumpResponse(resp, false)
+			if err != nil {
+				log.TWarnf("failed to dump response: %s", err)
+			}
+		}
+		log.Infof("Response: %s", respDump)
 
 		if err := json.Unmarshal(rb, response); err != nil {
 			return resp.StatusCode, fmt.Errorf("error: %s, response: %s", err, string(rb))
