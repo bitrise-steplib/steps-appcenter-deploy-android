@@ -48,7 +48,7 @@ import (
 
 var (
 	// Default retry configuration
-	defaultRetryWaitMin = 1 * time.Second
+	defaultRetryWaitMin = 30 * time.Second
 	defaultRetryWaitMax = 30 * time.Second
 	defaultRetryMax     = 4
 
