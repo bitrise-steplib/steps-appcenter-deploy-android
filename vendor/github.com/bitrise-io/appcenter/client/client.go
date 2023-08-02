@@ -2,17 +2,16 @@ package client
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
+	"os"
 	"strconv"
-	"time"
 
 	"github.com/bitrise-io/go-utils/log"
+	"github.com/bitrise-io/go-utils/retry"
 	"github.com/hashicorp/go-retryablehttp"
 )
 
@@ -26,12 +25,13 @@ type roundTripper struct {
 
 // RoundTrip ...
 func (rt roundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
-	req.Header.Add(
+	req.Header.Set(
 		"x-api-token", rt.token,
 	)
-	req.Header.Add(
+	req.Header.Set(
 		"content-type", "application/json; charset=utf-8",
 	)
+
 	return http.DefaultTransport.RoundTrip(req)
 }
 
@@ -42,22 +42,7 @@ type Client struct {
 
 // NewClient returns an AppCenter authenticated client
 func NewClient(token string) Client {
-	retClient := retryablehttp.NewClient()
-
-	retClient.RetryMax = 5
-	retClient.RetryWaitMin = 5 * time.Second
-	retClient.RetryWaitMax = 10 * time.Second
-
-	retClient.CheckRetry = func(ctx context.Context, resp *http.Response, err error) (bool, error) {
-		ok, e := retryablehttp.DefaultRetryPolicy(ctx, resp, err)
-		if !ok && resp.StatusCode == http.StatusUnauthorized {
-			return true, e
-		}
-
-		return ok, e
-	}
-	retClient.ErrorHandler = retryablehttp.PassthroughErrorHandler
-
+	retClient := retry.NewHTTPClient()
 	retClient.HTTPClient.Transport = &roundTripper{
 		token: token,
 	}
@@ -93,36 +78,24 @@ func (c Client) jsonRequest(method, url string, body []byte, response interface{
 		}
 	}()
 
-	if resp != nil {
-		if resp.Request.Header.Get("x-api-token") == "" {
-			log.Errorf("Authorization token missing from request.")
-		}
-	}
-
-	reqDump, err := httputil.DumpRequestOut(resp.Request, true)
-	if err != nil {
-		log.TWarnf("failed to dump request: %v", err)
-	}
-	log.TInfof("Request: %s", reqDump)
-
-	dumpBody := false
-	if resp.StatusCode >= 300 || resp.StatusCode < 200 {
-		dumpBody = true
-	}
-	respDump, err := httputil.DumpResponse(resp, dumpBody)
-	if err != nil {
-		log.TWarnf("failed to dump response: %s", err)
-	}
-	log.Infof("Response: %s", respDump)
-
 	if resp != nil && response != nil {
-		rb, err := ioutil.ReadAll(resp.Body)
+		rb, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return -1, err
 		}
 
 		if err := json.Unmarshal(rb, response); err != nil {
-			return resp.StatusCode, fmt.Errorf("error: %s, response: %s", err, string(rb))
+			reqDump, err := httputil.DumpRequestOut(resp.Request, true)
+			if err != nil {
+				log.Warnf("failed to dump request: %v", err)
+			}
+
+			respDump, err := httputil.DumpResponse(resp, false)
+			if err != nil {
+				log.TWarnf("failed to dump response: %s", err)
+			}
+
+			return resp.StatusCode, fmt.Errorf("failed to unmarshal response: %s, request: %s, response headers: %s response body: %s", err, reqDump, respDump, string(rb))
 		}
 	}
 
@@ -140,7 +113,7 @@ func (c Client) MarshallContent(content interface{}) ([]byte, error) {
 }
 
 func (c Client) uploadFile(url string, filePath string) (int, error) {
-	fb, err := ioutil.ReadFile(filePath)
+	fb, err := os.ReadFile(filePath)
 	if err != nil {
 		return -1, err
 	}
@@ -160,6 +133,7 @@ func (c Client) uploadFile(url string, filePath string) (int, error) {
 
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
+			log.Warnf("failed to close body: %s", err)
 		}
 	}()
 
