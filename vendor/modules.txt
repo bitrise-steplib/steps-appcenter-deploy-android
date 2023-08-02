@@ -1,4 +1,4 @@
-# github.com/bitrise-io/appcenter v0.0.0-20230802124647-5be1c270f79c
+# github.com/bitrise-io/appcenter v0.0.0-20230802130520-79c7d0c3453c
 ## explicit
 github.com/bitrise-io/appcenter
 github.com/bitrise-io/appcenter/client
