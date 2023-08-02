@@ -92,7 +92,7 @@ workflows:
         - api_token: $API_TOKEN
         - owner_name: $APPCENTER_APP_OWNER
         - app_name: $APPCENTER_APP_NAME
-        - debug: "no"  # Because of the upload
+        - debug: "yes"
         - release_notes: Bitrise step test
     - script:
         title: Check output envs
