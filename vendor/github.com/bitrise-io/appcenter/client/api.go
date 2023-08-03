@@ -10,9 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bitrise-io/appcenter/util"
-
 	"github.com/bitrise-io/appcenter/model"
+	"github.com/bitrise-io/appcenter/util"
 )
 
 const (
@@ -30,13 +29,15 @@ type fileAssetResponse struct {
 
 // API ...
 type API struct {
-	Client Client
+	Client  Client
+	baseURL string
 }
 
 // CreateAPIWithClientParams ...
 func CreateAPIWithClientParams(token string) API {
 	return API{
-		Client: NewClient(token),
+		Client:  NewClient(token),
+		baseURL: baseURL,
 	}
 }
 
@@ -44,7 +45,7 @@ func CreateAPIWithClientParams(token string) API {
 func (api API) GetAppReleaseDetails(app model.App, releaseID int) (model.Release, error) {
 	//fetch releases and find the latest
 	var (
-		releaseShowURL = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%s", baseURL, app.Owner, app.AppName, strconv.Itoa(releaseID))
+		releaseShowURL = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%s", api.baseURL, app.Owner, app.AppName, strconv.Itoa(releaseID))
 		release        model.Release
 	)
 
@@ -63,7 +64,7 @@ func (api API) GetAppReleaseDetails(app model.App, releaseID int) (model.Release
 // GetGroupByName ...
 func (api API) GetGroupByName(groupName string, app model.App) (model.Group, error) {
 	var (
-		getURL      = fmt.Sprintf("%s/v0.1/apps/%s/%s/distribution_groups/%s", baseURL, app.Owner, app.AppName, groupName)
+		getURL      = fmt.Sprintf("%s/v0.1/apps/%s/%s/distribution_groups/%s", api.baseURL, app.Owner, app.AppName, groupName)
 		getResponse model.Group
 	)
 
@@ -82,7 +83,7 @@ func (api API) GetGroupByName(groupName string, app model.App) (model.Group, err
 // GetAllGroups ...
 func (api API) GetAllGroups(app model.App) ([]model.Group, error) {
 	var (
-		getURL      = fmt.Sprintf("%s/v0.1/apps/%s/%s/distribution_groups", baseURL, app.Owner, app.AppName)
+		getURL      = fmt.Sprintf("%s/v0.1/apps/%s/%s/distribution_groups", api.baseURL, app.Owner, app.AppName)
 		getResponse []model.Group
 	)
 
@@ -101,7 +102,7 @@ func (api API) GetAllGroups(app model.App) ([]model.Group, error) {
 // GetStore ...
 func (api API) GetStore(storeName string, app model.App) (model.Store, error) {
 	var (
-		getURL      = fmt.Sprintf("%s/v0.1/apps/%s/%s/distribution_stores/%s", baseURL, app.Owner, app.AppName, storeName)
+		getURL      = fmt.Sprintf("%s/v0.1/apps/%s/%s/distribution_stores/%s", api.baseURL, app.Owner, app.AppName, storeName)
 		getResponse model.Store
 	)
 
@@ -120,7 +121,7 @@ func (api API) GetStore(storeName string, app model.App) (model.Store, error) {
 // AddReleaseToGroup ...
 func (api API) AddReleaseToGroup(g model.Group, releaseID int, opts model.ReleaseOptions) error {
 	var (
-		postURL     = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%d/groups", baseURL, opts.App.Owner, opts.App.AppName, releaseID)
+		postURL     = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%d/groups", api.baseURL, opts.App.Owner, opts.App.AppName, releaseID)
 		postRequest = struct {
 			ID              string `json:"id"`
 			MandatoryUpdate bool   `json:"mandatory_update"`
@@ -152,7 +153,7 @@ func (api API) AddReleaseToGroup(g model.Group, releaseID int, opts model.Releas
 // AddReleaseToStore ...
 func (api API) AddReleaseToStore(s model.Store, releaseID int, opts model.ReleaseOptions) error {
 	var (
-		postURL     = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%d/stores", baseURL, opts.App.Owner, opts.App.AppName, releaseID)
+		postURL     = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%d/stores", api.baseURL, opts.App.Owner, opts.App.AppName, releaseID)
 		postRequest = struct {
 			ID string `json:"id"`
 		}{
@@ -180,7 +181,7 @@ func (api API) AddReleaseToStore(s model.Store, releaseID int, opts model.Releas
 // AddTesterToRelease ...
 func (api API) AddTesterToRelease(email string, releaseID int, opts model.ReleaseOptions) error {
 	var (
-		postURL     = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%d/testers", baseURL, opts.App.Owner, opts.App.AppName, releaseID)
+		postURL     = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%d/testers", api.baseURL, opts.App.Owner, opts.App.AppName, releaseID)
 		postRequest = struct {
 			Email           string `json:"email"`
 			MandatoryUpdate bool   `json:"mandatory_update"`
@@ -212,7 +213,7 @@ func (api API) AddTesterToRelease(email string, releaseID int, opts model.Releas
 // SetReleaseNoteOnRelease ...
 func (api API) SetReleaseNoteOnRelease(releaseNote string, releaseID int, opts model.ReleaseOptions) error {
 	var (
-		putURL     = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%d", baseURL, opts.App.Owner, opts.App.AppName, releaseID)
+		putURL     = fmt.Sprintf("%s/v0.1/apps/%s/%s/releases/%d", api.baseURL, opts.App.Owner, opts.App.AppName, releaseID)
 		putRequest = struct {
 			ReleaseNotes string `json:"release_notes,omitempty"`
 		}{
@@ -246,7 +247,7 @@ func (api API) UploadSymbolToRelease(filePath string, release model.Release, opt
 
 	// send file upload request
 	var (
-		postURL  = fmt.Sprintf("%s/v0.1/apps/%s/%s/symbol_uploads", baseURL, opts.App.Owner, opts.App.AppName)
+		postURL  = fmt.Sprintf("%s/v0.1/apps/%s/%s/symbol_uploads", api.baseURL, opts.App.Owner, opts.App.AppName)
 		postBody = struct {
 			SymbolType model.SymbolType `json:"symbol_type"`
 			FileName   string           `json:"file_name,omitempty"`
@@ -290,7 +291,7 @@ func (api API) UploadSymbolToRelease(filePath string, release model.Release, opt
 	}
 
 	var (
-		patchURL  = fmt.Sprintf("%s/v0.1/apps/%s/%s/symbol_uploads/%s", baseURL, opts.App.Owner, opts.App.AppName, postResponse.SymbolUploadID)
+		patchURL  = fmt.Sprintf("%s/v0.1/apps/%s/%s/symbol_uploads/%s", api.baseURL, opts.App.Owner, opts.App.AppName, postResponse.SymbolUploadID)
 		patchBody = map[string]string{
 			"status": "committed",
 		}
@@ -317,7 +318,7 @@ func (api API) UploadSymbolToRelease(filePath string, release model.Release, opt
 func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 	var (
 		assetsURL = fmt.Sprintf("%s/v0.1/apps/%s/%s/uploads/releases",
-			baseURL,
+			api.baseURL,
 			opts.App.Owner,
 			opts.App.AppName)
 		assetResponse fileAssetResponse
@@ -417,7 +418,7 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 	var (
 		releasePatchURL = fmt.Sprintf("%s/v0.1/apps/%s/%s/uploads/releases/%s",
-			baseURL,
+			api.baseURL,
 			opts.App.Owner,
 			opts.App.AppName,
 			assetResponse.ReleaseID)
@@ -458,7 +459,7 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 		var (
 			getURL = fmt.Sprintf("%s/v0.1/apps/%s/%s/uploads/releases/%s",
-				baseURL,
+				api.baseURL,
 				opts.App.Owner,
 				opts.App.AppName,
 				assetResponse.ReleaseID)
