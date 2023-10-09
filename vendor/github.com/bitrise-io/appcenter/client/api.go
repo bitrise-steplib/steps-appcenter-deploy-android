@@ -1,22 +1,25 @@
 package client
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"path/filepath"
 	"strconv"
-	"sync"
 	"time"
+
+	"golang.org/x/sync/semaphore"
 
 	"github.com/bitrise-io/appcenter/model"
 	"github.com/bitrise-io/appcenter/util"
 )
 
 const (
-	maxAttempts     = 100
-	releaseFailedID = -1
+	maxAttempts               = 100
+	maxConcurrentChunkUploads = 10
+	releaseFailedID           = -1
 )
 
 type fileAssetResponse struct {
@@ -386,7 +389,7 @@ func (api API) CreateRelease(opts model.ReleaseOptions) (int, error) {
 
 	fileChunks := file.MakeChunks(metadataResponse.ChunkSize)
 
-	err = api.uploadChunksParallelly(fileChunks, metadataResponse.ChunkList, assetResponse)
+	err = api.uploadChunksInParallel(fileChunks, metadataResponse.ChunkList, assetResponse)
 	if err != nil {
 		return releaseFailedID, err
 	}
@@ -516,15 +519,19 @@ func getContentType(appType model.AppType) string {
 	}
 }
 
-func (api API) uploadChunksParallelly(fileChunks [][]byte, chunkIDs []int, assetResponse fileAssetResponse) (retErr error) {
-	var wg sync.WaitGroup
-	wg.Add(len(fileChunks))
+func (api API) uploadChunksInParallel(fileChunks [][]byte, chunkIDs []int, assetResponse fileAssetResponse) (retErr error) {
+	sem := semaphore.NewWeighted(maxConcurrentChunkUploads)
+	ctx := context.Background()
 
 	for idx, chunkID := range chunkIDs {
 		chunk := fileChunks[idx]
 
+		if err := sem.Acquire(ctx, 1); err != nil {
+			return err
+		}
+
 		go func(chunk []byte, ID int) {
-			defer wg.Done()
+			defer sem.Release(1)
 
 			fmt.Println(fmt.Sprintf("Uploading chunk with ID: %d, size: %d", ID, len(chunk)))
 
@@ -562,7 +569,10 @@ func (api API) uploadChunksParallelly(fileChunks [][]byte, chunkIDs []int, asset
 		}(chunk, chunkID)
 	}
 
-	wg.Wait()
+	// Acquire all tokens to wait for all the goroutines to finish.
+	if err := sem.Acquire(ctx, maxConcurrentChunkUploads); err != nil {
+		return err
+	}
 
 	return
 }
